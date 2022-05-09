@@ -10,6 +10,8 @@ export default function Home() {
   return (
   
     <div>
+      
+      <button type="button" class="btn btn-primary">Primary</button>
 
       <h1> 트렌드 분석 시스템 </h1>
       
@@ -19,6 +21,7 @@ export default function Home() {
       <br></br>
       <DataSheetViewButton></DataSheetViewButton>
       
+
   
     </div>
   )

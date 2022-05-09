@@ -1,7 +1,11 @@
-/* '데이터시트 조회' 버튼 */
+/* '키워드 검색' 버튼 */
 
 import React, { Component } from 'react';
 import css from "styled-jsx/css";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
 
 const style = css`
   button {
@@ -47,16 +51,16 @@ const KeyWordSearchButton = (props) => {
     const { children, onClick } = props;
 
     // ChartViewButton 클릭
-
     const handleClick = () => {
-        console.log("click")
+        //postAPI();
       }
 
 
     return (
         <div>
-      <button onClick={handleClick}>{children}검색</button>
+      <button onClick={onClick}>{children}검색</button>
       <style jsx>{style}</style>
+
       </div>
     )
   }
