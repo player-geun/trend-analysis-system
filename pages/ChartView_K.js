@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Graph from '../components/Graph/graph'
 import axios from 'axios';
-import SearchKeyword  from '../components/Input/SearchKeyword'
+import SearchKeyword  from '../components/Chart/SearchKeyword'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
@@ -28,7 +28,7 @@ export default function ChartView_K() {
                 </li>
   
                 <li class="nav-item">
-                  <a class="nav-link" href="#">키워드 조회/등록/삭제</a>
+                  <a class="nav-link" href="/KeywordHandle">키워드 조회/등록/삭제</a>
                 </li>
 
                 <li class="nav-item">

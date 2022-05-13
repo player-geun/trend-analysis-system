@@ -14,7 +14,7 @@ export default function Home() {
   
     <div>
 
-      <h1 style={{ fontFamily : 'NanumSquare' }}> 트렌드 분석 시스템 </h1>
+      <h1 class = "mx-4 my-4" style={{ fontFamily : 'NanumSquare' }}> 트렌드 분석 시스템 </h1>
       <br></br>
 
 
