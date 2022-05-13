@@ -54,7 +54,7 @@ const ChartViewButton = (props) => {
     return (
         <div>
 
-        <Link href="/ChartView">
+        <Link href="/ChartView_K">
         <button type="button" class="btn btn-primary btn-lg" style={{ fontFamily : 'NanumSquare' }}>차트 조회</button>
         </Link>
   

@@ -17,7 +17,7 @@ const KeywordHandleButton = (props) => {
     return (
         <div>
 
-        <Link href="/ChartView">
+        <Link href="/KeywordHandle">
         <button type="button" class="btn btn-info btn-lg" style={{ fontFamily : 'NanumSquare' }}>키워드 조회/등록/삭제</button>
         </Link>
   
