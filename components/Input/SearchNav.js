@@ -1,12 +1,11 @@
 // file: src/components/PhoneForm.js
 import React, { Component } from 'react';
 import css from "styled-jsx/css";
-import KeyWordSearchButton from '../../components/Button/KeywordSearchButton'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Graph from '../Graph/graph';
 
-export function SearchBar(props) {
+export function SearchNav(props) {
 
 
     //그래프
@@ -72,38 +71,28 @@ export function SearchBar(props) {
 
 
 
-    return (
+return (
+<div>
+  <form class="form-inline" style={{ fontFamily : 'NanumSquare' }}>
+    <input class="form-control mr-sm-2" type="search" placeholder="키워드 입력" aria-label="Search" 
+           style={{ width : '300px', height : '50px',  fontSize : '20px', fontFamily : 'NanumSquare' }}
+           value={state.name} //입력되는 값.
+           onChange={handleChange}/>
 
-    <div>
+    <button type = "button" class="btn btn-outline-primary my-2 my-sm-0" 
+            style={{ width : '100px', height : '50px',  fontSize : '20px' }}
+            onClick={postAPI}>검색</button>
+  </form>
 
-        <form>
-            <input
-            placeholder="키워드를 입력하세요."
-            value={state.name} //입력되는 값.
-            onChange={handleChange}
-            style = {{width:250 , height:70, fontSize:25}}
-            />
+  <div className="py-2 my-5 ">
+    <Graph data = {graphData} />
+  </div>
 
+</div>
 
-            <h1>{state.name}</h1>
-        </form>
-
-
-
-
-        <KeyWordSearchButton 
-        onClick={postAPI}/>
-
-        
-
-        <Graph
-                data = {graphData} 
-            />
-
-     
-      </div>
+ 
     );
   
 }
 
-export default SearchBar;
+export default SearchNav;

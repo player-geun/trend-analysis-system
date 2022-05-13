@@ -1,9 +1,11 @@
 html,
-body		{ font-family: 'NanumSquare', sans-serif; }
-.normal		{ font-weight: 400 }
-.bold		{ font-weight: 700 }
-.bolder		{ font-weight: 800 }
-.light		{ font-weight: 300 }
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'NanumSquare',sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
 
 a {
   color: inherit;
