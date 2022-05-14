@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import Graph from '../Graph/graph';
 import Router from 'next/router';
 
+import KeywordTable from './KeywordTable';
+
 export function Handle(props) {
 
 
@@ -63,9 +65,6 @@ export function Handle(props) {
   
 
 
-
- 
-
   /*키워드*/
   const [state,SetState] = useState('');
   const handleKeyword1 = (e) => {
@@ -78,7 +77,10 @@ export function Handle(props) {
   }
 
 
- 
+/* 키워드 테이블*/
+
+
+
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
 
@@ -112,11 +114,17 @@ return (
   </form>
   <br />
   
-
-
-  
   </div>
   <br />
+
+  
+
+ <KeywordTable />
+
+ 
+
+
+
 
 
 

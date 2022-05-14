@@ -32,11 +32,11 @@ export default function ChartView_K() {
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="#">키워드 정정</a>
+                  <a class="nav-link" href="/KeywordModify">키워드 정정</a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="#">키워드 등록 현황</a>
+                  <a class="nav-link" href="/KeywordRegStat">키워드 등록 현황</a>
                 </li>
               </ul>
             
