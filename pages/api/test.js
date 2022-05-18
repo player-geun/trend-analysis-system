@@ -1,7 +1,8 @@
-import axios from "axios";
-import CryptoJS from "crypto-js";
 
-export default function handler(res,req){
+import CryptoJS from "crypto-js";
+import axios from 'axios';
+
+export default function handler(req, res) {
   var method = "GET";
   var timestamp = Date.now() + '';
   var api_url = "/keywordstool";
@@ -21,7 +22,6 @@ export default function handler(res,req){
     const result = await axios.get(url,{
       params:{
         hintKeywords : hintKeywords,
-       
       },
       headers: {
         'X-Timestamp': timestamp,
@@ -37,68 +37,55 @@ export default function handler(res,req){
       resultAPI = r.data;
       console.log(resultAPI);
       res.status(200).json(resultAPI)
-      let url = "https://openapi.naver.com/v1/datalab/search";
-      var result = null;
       
-    
-      const postAPI = async() => {
-        const result = await axios.post(url,
-          {
-            startDate: "2021-01-01",
-            endDate: "2022-04-01",
-            timeUnit: "week",
-            keywordGroups: [
-              {
-                groupName: "포켓몬",
-                keywords: [
-                  "포켓몬",
-                  "pokemon"
-                ]
-              },
-              {
-                groupName: "항공대",
-                keywords: [
-                  "항공대학교",
-                  "한국항공대학교",
-                  "항공대"
-                ]
-              }
-            ],
-            device: "pc",
-            ages: [
-              
-            ],
-            gender: ""
-          }, 
-          { 
-            headers: { 
-              'Content-type': 'application/json', 
+      //만약 처음 호출이 성공 했을 경우 다음 api 불러오기 
+      const postAPI=async()=>{
+        try {
+          const{
+            startDate,
+            endDate,
+            timeUnit,
+            device,
+            gender,
+            keywordGroups,
+          }=req.body;
+            const request_body = {
+              startDate: startDate,
+              endDate: endDate,
+              timeUnit: timeUnit,
+              device: device === "all" ? "" : device,
+              gender: gender === "all" ? "" : gender,
+              keywordGroups: keywordGroups,
+            };
+            console.log(req.body);
+            const url = "https://openapi.naver.com/v1/datalab/search";
+            const headers={ 
+              'Content-type': 'application/json; charset=UTF-8', 
               'Accept': 'application/json',
-              'X-Naver-Client-Id' : "2tULlklliDs1_lg6P1Zl",
+              'X-Naver-Client-Id' :  "2tULlklliDs1_lg6P1Zl",
               'X-Naver-Client-Secret' : "Cg0ZbbCX1W",
               'Access-Control-Allow-Origin' : '*',
               'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
             } 
-          } 
-        )
-        .then(r => {
-            console.log("SUCCESS-");
-            result = r.data;
-            console.log(result);
-            res.status(200).json(result)
-          })
-        .catch((response) => { 
-            // Failure
-            console.log('Error!!-')
-          })
-        
-      }
+            const result = await axios.post(url, request_body, {
+                headers: headers,
+              });
+             
+            console.log(result.data);
+            console.log("성공?")
+            return res.status(200).json(result.data);
+            }catch(error){
+             console.log(error);
+            }
+    }
+    postAPI();
     })
     .catch((response) => { 
       // Failure
-      console.log(sig,timestamp)
+      //console.log(sig,timestamp)
       console.log('Error!!!')
     })
   }
-}
+  GetAPI();
 
+}
