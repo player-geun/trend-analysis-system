@@ -1,4 +1,3 @@
-
 import CryptoJS from "crypto-js";
 import axios from 'axios';
 
@@ -12,6 +11,7 @@ export default function handler(req, res) {
   var hash = hmac.finalize();
   var sig = hash.toString(CryptoJS.enc.Base64);
   var resultAPI = null;
+  var result_api=null;
   
   
   let url = 'https://api.naver.com/keywordstool?hintKeywords='+ encodeURI(req.query.hintKeywords) + '&showDetail=1';
@@ -36,56 +36,53 @@ export default function handler(req, res) {
       console.log("success!")
       resultAPI = r.data;
       console.log(resultAPI);
-      res.status(200).json(resultAPI)
-      
+      // 화면에 굳이 띄울 필요가 없다 그러면 오류가 발생하지 않는다!
+      //return res.status(200).json(resultAPI)
+     })   
       //만약 처음 호출이 성공 했을 경우 다음 api 불러오기 
-      const postAPI=async()=>{
-        try {
-          const{
-            startDate,
-            endDate,
-            timeUnit,
-            device,
-            gender,
-            keywordGroups,
-          }=req.body;
-            const request_body = {
-              startDate: startDate,
-              endDate: endDate,
-              timeUnit: timeUnit,
-              device: device === "all" ? "" : device,
-              gender: gender === "all" ? "" : gender,
-              keywordGroups: keywordGroups,
-            };
-            console.log(req.body);
-            const url = "https://openapi.naver.com/v1/datalab/search";
-            const headers={ 
-              'Content-type': 'application/json; charset=UTF-8', 
-              'Accept': 'application/json',
-              'X-Naver-Client-Id' :  "2tULlklliDs1_lg6P1Zl",
-              'X-Naver-Client-Secret' : "Cg0ZbbCX1W",
-              'Access-Control-Allow-Origin' : '*',
-              'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-            } 
-            const result = await axios.post(url, request_body, {
-                headers: headers,
-              });
-             
-            console.log(result.data);
-            console.log("성공?")
-            return res.status(200).json(result.data);
-            }catch(error){
-             console.log(error);
-            }
-    }
-    postAPI();
-    })
-    .catch((response) => { 
+  
+    .catch((error) => { 
       // Failure
       //console.log(sig,timestamp)
-      console.log('Error!!!')
+      console.log(error)
     })
   }
+ 
   GetAPI();
+  const postAPI=async()=>{
+    try {
+      const request_body = {
+        startDate: "2017-10-01",
+        endDate: "2020-10-30",
+        timeUnit: "month",
+        keywordGroups: [
+          { groupName: "치킨", keywords: ["BBQ", "BHC", "교촌치킨"] },
+          { groupName: "떡볶이", keywords: ["엽기떡볶이","신전떡볶이", "배떡"] },
+        ],
+      };
+        const url = "https://openapi.naver.com/v1/datalab/search";
+        const headers={ 
+          'Content-type': 'application/json', 
+          'Accept': 'application/json',
+          'X-Naver-Client-Id' :  "PKjTmaEjasvkR4a2qbEy",
+          'X-Naver-Client-Secret' : "zQC7scyLbz",
+          'Access-Control-Allow-Origin' : '*',
+          'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+        } 
+        const api_result = await axios.post(url, request_body, {
+            headers: headers,
+          });
+        result_api=api_result.data
+        
+        console.log(result_api);
+        //return res.status(200).json(result_api);
+        }catch(error){
+         console.log(error);
+        }
+}
+
+ 
+
+ postAPI();
 
 }
