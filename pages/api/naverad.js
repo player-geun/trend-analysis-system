@@ -1,5 +1,4 @@
-// 유저 정보를 모두 조회하는 API
-
+//네이버 검색광고 api 받아오는 코드
 import CryptoJS from "crypto-js";
 import axios from 'axios';
 

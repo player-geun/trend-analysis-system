@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+// 네이버 트랜드 분석 api 받아오기
 export default function handler(req,res){
   const postAPI=async()=>{
     try {
