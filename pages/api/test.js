@@ -11,13 +11,18 @@ let hash = hmac.finalize();
 let sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광고 api 시그니쳐 키 만드는 코드 sig가 시그니처키가 됨!!
 
 export default async function handler(req, res) {
-  const keywords = req.query.keywords.split(',');
+  let keywords = req.query.keywords.replace(/ /g, '').split(',');
 
   const adSearchData = await getAdSearchData(keywords);
 
-  const trendAnalysisData = await getTrendAnalysisData(keywords);
+  // 네이버 광고 검색 API의 결과순서가 입력 키워드의 순서랑 다름. 
+  // 트렌드 분석 API에서 검색 광고 결과와 똑같은 순서로 요청하기 위해 아래 코드 작성 함.
+  keywords = [];
+  adSearchData.forEach(obj => {
+    keywords.push(obj.relKeyword);
+  })
 
-  console.log(trendAnalysisData);
+  const trendAnalysisData = await getTrendAnalysisData(keywords);
 
   return res.status(200).json(trendAnalysisData);
 
@@ -39,7 +44,7 @@ const getAdSearchData = async (hintKeywords) => {
     }
   });
 
-  return await result.data;
+  return await result.data.keywordList.slice(0, hintKeywords.length);
 
 }
 
