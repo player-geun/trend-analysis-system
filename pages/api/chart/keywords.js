@@ -12,19 +12,52 @@ let sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광�
 
 export default async function handler(req, res) {
   let keywords = req.query.keywords.replace(/ /g, '').split(',');
+  const searchAllAmounts = [];
 
   const adSearchData = await getAdSearchData(keywords);
+  const keywordAllRatios = [];
 
   // 네이버 광고 검색 API의 결과순서가 입력 키워드의 순서랑 다름. 
   // 트렌드 분석 API에서 검색 광고 결과와 똑같은 순서로 요청하기 위해 아래 코드 작성 함.
   keywords = [];
   adSearchData.forEach(obj => {
     keywords.push(obj.relKeyword);
-  })
+    searchAllAmounts.push(obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt)
+  });
 
   const trendAnalysisData = await getTrendAnalysisData(keywords);
 
-  return res.status(200).json(trendAnalysisData);
+  trendAnalysisData.results.forEach(obj => {
+    let allRatio = 0;
+    obj.data.forEach(data => {
+      allRatio += data.ratio;
+    })
+    keywordAllRatios.push(allRatio);
+  });
+
+  const searchEachAmounts = [];
+  
+  keywords.forEach((keyword, index) => {
+    const keywordAmountArray = [];
+    trendAnalysisData.results[index].data.forEach(data => {
+      keywordAmountArray.push({
+        period : data.period,
+        amount : (data.ratio / keywordAllRatios[index]) * searchAllAmounts[index]
+      })
+    })
+    searchEachAmounts.push({
+      keyword : keyword,
+      keywordAmountArray : keywordAmountArray
+    })
+  });
+
+  const result = {
+    startDate : trendAnalysisData.startDate,
+    endDate : trendAnalysisData.endDate,
+    searchKeywordInfos : searchEachAmounts
+  };  
+
+  return res.status(200).json(result);
 
 }
 
