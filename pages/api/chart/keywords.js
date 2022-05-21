@@ -11,7 +11,7 @@ let hash = hmac.finalize();
 let sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광고 api 시그니쳐 키 만드는 코드 sig가 시그니처키가 됨!!
 
 export default async function handler(req, res) {
-  let keywords = req.query.keywords.replace(/ /g, '').split(',');
+  let keywords = req.query.words.replace(/ /g, '').split(',');
   const searchAllAmounts = [];
 
   const adSearchData = await getAdSearchData(keywords);
