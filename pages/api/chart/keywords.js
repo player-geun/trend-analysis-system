@@ -12,6 +12,13 @@ let sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광�
 
 export default async function handler(req, res) {
   let keywords = req.query.words.replace(/ /g, '').split(',');
+  if (keywords.length > 5) {
+    return res.status(200).json({
+        isSuccess : false,
+        code : 4001,
+        message : "키워드 갯수가 5개를 초과했습니다.",
+    });
+  } 
   const searchAllAmounts = [];
 
   const adSearchData = await getAdSearchData(keywords);
@@ -57,7 +64,18 @@ export default async function handler(req, res) {
     searchKeywordInfos : searchEachAmounts
   };  
 
-  return res.status(200).json(result);
+  return res.status(200).json({
+      isSuccess : true,
+      code : 1000,
+      message : "성공",
+      result : result
+  });
+
+//   return res.status(403).json({
+//     isSuccess : true,
+//     code : 2000,
+//     message : "데이터 호출에 실패했습니다."
+//   })
 
 }
 
