@@ -1,15 +1,6 @@
 import CryptoJS from "crypto-js";
 import axios from 'axios';
 
-let method = "GET";
-let timestamp = Date.now() + '';
-let api_url = "/keywordstool";
-let secretKey = "AQAAAACT7uHudX4LLpvV/vgpgD2ZYQ67SnPhqeOMWzEfK+rlqA==";
-let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
-hmac.update(timestamp + '.' + method + '.' + api_url);
-let hash = hmac.finalize();
-let sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광고 api 시그니쳐 키 만드는 코드 sig가 시그니처키가 됨!!
-
 export default async function handler(req, res) {
   let keywords = req.query.words.replace(/ /g, '').split(',');
   if (keywords.length > 5) {
@@ -80,7 +71,16 @@ export default async function handler(req, res) {
 }
 
 const getAdSearchData = async (hintKeywords) => {
-  let url = 'https://api.naver.com/keywordstool?hintKeywords='+ encodeURI(hintKeywords) + '&showDetail=1';
+  const method = "GET";
+  const timestamp = Date.now() + '';
+  const api_url = "/keywordstool";
+  const secretKey = "AQAAAACT7uHudX4LLpvV/vgpgD2ZYQ67SnPhqeOMWzEfK+rlqA==";
+  const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
+  hmac.update(timestamp + '.' + method + '.' + api_url);
+  const hash = hmac.finalize();
+  const sig = hash.toString(CryptoJS.enc.Base64); // 여기 까지 naver 검색광고 api 시그니쳐 키 만드는 코드 sig가 시그니처키가 됨!!
+
+  const url = 'https://api.naver.com/keywordstool?hintKeywords='+ encodeURI(hintKeywords) + '&showDetail=1';
 
   const result = await axios.get(url,{
     params:{
