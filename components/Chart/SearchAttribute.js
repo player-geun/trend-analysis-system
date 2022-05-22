@@ -12,71 +12,64 @@ import "react-datepicker/dist/react-datepicker.css"
 export function SearchAttribute(props) {
 
 
-    //그래프
-    const [graphData, setGraphData] = useState({datasets : [ { type: '', label: '', borderColor: '',borderWidth: 0, data: [] } ] } )
-    let url = "/api/search-trend";
+      //데이터    
+      let url = "/api/chart/keywords?words=강아지,고양이";
 
-    const getConvertToXY = (array) =>{
-      var resArr = [];
+      const [graphData, setGraphData] = useState({datasets : [ { type: '', label: '', borderColor: '',borderWidth: 0, data: [] } ] } )
   
-      array.forEach(element => {
-        resArr.push({x: element.period, y: element.ratio});
-      });
-  
-      return resArr;
-    }
-  
-    const postAPI = async() => {
-  
-      const result = await axios.get(url);
-      console.log("result data", result.data);
-  
-      let res1 = getConvertToXY(result.data.results[0].data);
-      let res1title = result.data.results[0].title
-      let res2 = getConvertToXY(result.data.results[1].data);
-      let res2title = result.data.results[1].title
-      let res3 = getConvertToXY(result.data.results[2].data);
-      let res3title = result.data.results[2].title
-  
-  
-      console.log(res1);
-  
-      setGraphData(
-        {
-          // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-          // labels 대신 아래와 같이 각각의 데이터의 x값을 개별적으로 전달해줍니다.
-          datasets: [
-            {
-              type: 'line',
-              label: res1title,
-              borderColor: 'rgb(54, 162, 235)',
-              borderWidth: 2,
-              data: res1,
-            },
-            {
-              type: 'line',
-              label: res2title,
-              backgroundColor: 'rgb(255, 99, 132)',
-              data: res2,
-              borderColor: 'red',
-              borderWidth: 2,
-            },
-            {
-              type: 'line',
-              label: res3title,
-              backgroundColor: 'green',
-              data: res3,
-              borderColor: 'green',
-              borderWidth: 2,
-            }
-          ]
+      //데이터 변환
+      const getConvertToXY = (array) =>{
+          var resArr = [];
+      
+          array.forEach(element => {
+            resArr.push({x: element.period, y: element.amount});
+          });
+      
+          return resArr;
         }
-      );
-    }
+    
+      const postAPI = async() => {
+        const searchData = await axios.get("/api/chart/keywords?words=강아지,고양이");
+        const searchDataList1 = searchData.data.result.searchKeywordInfos[0].keywordAmountArray;
+        const searchDataList2 = searchData.data.result.searchKeywordInfos[1].keywordAmountArray;
+        //const item = searchDataList1.map((i => (console.log(i.period, i.amount))));
+     
+       // let res1 = searchDataList.map((i => (i.amount)));
+       // let res1title = searchDataList.map((i => (i.period)));
+  
+        
+  
+        let res1 = getConvertToXY(searchDataList1);
+        let res2 = getConvertToXY(searchDataList2);
+       
   
   
-
-
+    
+        setGraphData(
+          {
+            // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            // labels 대신 아래와 같이 각각의 데이터의 x값을 개별적으로 전달해줍니다.
+            datasets: [
+              {
+                type: 'line',
+                label: "강아지", //동적 변경 필요
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 2,
+                data: res1,
+              },
+              {
+                  type: 'line',
+                  label: "고양이", //동적 변경 필요
+                  borderColor: 'red',
+                  borderWidth: 2,
+                  data: res2,
+                },
+            ]
+          }
+        );
+      
+  
+      }
 
  
 
