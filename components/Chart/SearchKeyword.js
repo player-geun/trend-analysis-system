@@ -13,10 +13,35 @@ import {getTrendAnalysisData} from "../../pages/api/chart/keywords"
 
 export function SearchKeyword(props) {
 
+      
+  /*키워드*/
+  const [state,SetState] = useState('');
+  const handleKeyword1 = (e) => {
+    console.log(e.target.value)
+    SetState(e.target.value)
+  }
+
+
+  /*구분*/
+  const [classification,SetClassification] = useState("1");
+  const handleClickRadioButton = (e) => {
+    console.log(e.target.value)
+    SetClassification(e.target.value)
+    if(e.target.value === "2"){
+      const targetPage = '/ChartView_A';
+      Router.push(targetPage);
+    }
+  }
+
+  /*조회일자*/
+  const [startDate,setStartDate] = useState(new Date());
+  const [endDate,setEndDate] = useState(new Date());
+
+
+
 
     //데이터    
     let url = "/api/chart/keywords?words=강아지,고양이";
-
     const [graphData, setGraphData] = useState({datasets : [ { type: '', label: '', borderColor: '',borderWidth: 0, data: [] } ] } )
 
     //데이터 변환
@@ -39,13 +64,10 @@ export function SearchKeyword(props) {
      // let res1 = searchDataList.map((i => (i.amount)));
      // let res1title = searchDataList.map((i => (i.period)));
 
-      
-
+  
       let res1 = getConvertToXY(searchDataList1);
       let res2 = getConvertToXY(searchDataList2);
      
-
-  
 
 
   
@@ -56,7 +78,7 @@ export function SearchKeyword(props) {
           datasets: [
             {
               type: 'line',
-              label: "강아지", //동적 변경 필요
+              label: state, //동적 변경 필요
               borderColor: 'rgb(54, 162, 235)',
               borderWidth: 2,
               data: res1,
@@ -74,43 +96,6 @@ export function SearchKeyword(props) {
     
 
     }
-
-
-    
-  /*키워드*/
-  const [state,SetState] = useState('');
-  const handleKeyword1 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword2 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword3 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword4 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-
-  /*구분*/
-  const [classification,SetClassification] = useState("1");
-  const handleClickRadioButton = (e) => {
-    console.log(e.target.value)
-    SetClassification(e.target.value)
-    if(e.target.value === "2"){
-      const targetPage = '/ChartView_A';
-      Router.push(targetPage);
-    }
-  }
-
-  /*조회일자*/
-  const [startDate,setStartDate] = useState(new Date());
-  const [endDate,setEndDate] = useState(new Date());
-
 
 
 
@@ -203,23 +188,7 @@ return (
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword1}/>
-    
-   <input class="form-control mr-sm-2" type="search" placeholder="키워드 2" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px' }}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword2}/>
-           
-    <input class="form-control mr-sm-2" type="search" placeholder="키워드 3" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px'}}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword3}/>
-    
-    <input class="form-control mr-sm-2" type="search" placeholder="키워드 4" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px'}}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword4}/>
-
-
+ 
     <button type = "button" class="btn btn-outline-primary my-2 my-sm-0" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }}
             onClick={postAPI}>검색</button>

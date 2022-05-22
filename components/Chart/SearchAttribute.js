@@ -71,7 +71,7 @@ export function SearchAttribute(props) {
   
       }
 
- 
+
 
   /*키워드*/
   const [state,SetState] = useState('');
