@@ -20,6 +20,7 @@ const KeywordModifyButton = (props) => {
         <Link href="/KeywordModify">
         <button type="button" class="btn btn-primary btn-lg" style={{ fontFamily : 'NanumSquare' }}>키워드 정정</button>
         </Link>
+        
   
 
       </div>

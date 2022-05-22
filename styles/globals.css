@@ -6,6 +6,7 @@ body {
   line-height: 1.6;
   font-size: 16px;
 }
+.bold		{ font-weight: 700 }
 
 a {
   color: inherit;

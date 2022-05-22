@@ -59,10 +59,6 @@ return (
 
   
 
- <KeywordTable />
-
-
-
 
 </div>
 

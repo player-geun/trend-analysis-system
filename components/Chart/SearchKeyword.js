@@ -5,6 +5,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Graph from '../Graph/graph';
 import Router from 'next/router';
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+
 
 export function SearchKeyword(props) {
 
@@ -32,6 +35,9 @@ export function SearchKeyword(props) {
       let res1title = result.data.results[0].title
       let res2 = getConvertToXY(result.data.results[1].data);
       let res2title = result.data.results[1].title
+      let res3 = getConvertToXY(result.data.results[2].data);
+      let res3title = result.data.results[2].title
+  
   
       console.log(res1);
   
@@ -54,16 +60,20 @@ export function SearchKeyword(props) {
               data: res2,
               borderColor: 'red',
               borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: res3title,
+              backgroundColor: 'green',
+              data: res3,
+              borderColor: 'green',
+              borderWidth: 2,
             }
           ]
         }
       );
     }
   
-  
-
-
-
  
 
   /*키워드*/
@@ -98,12 +108,13 @@ export function SearchKeyword(props) {
 
   /*조회일자*/
   const [startDate,setStartDate] = useState(new Date());
+  const [endDate,setEndDate] = useState(new Date());
 
 
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
   <div class = "mx-3">
-      <a class = "mx-1"> 구분 </a>
+      <a class = "mx-0"> 구분 </a>
       <input class = "mx-3"
         type = "radio"
         value = "1"
@@ -126,7 +137,58 @@ return (
   <br />
 
   <div class = "mx-3">
-      <a> 조회일자  </a>
+  <a> 조회일자  </a>
+      <div className = "container">
+ 
+      <DatePicker
+        dateFormat = "yyyy/MM/dd"
+        selected = {startDate}
+        onChange = {date => setStartDate(date)}
+        selectsStart
+        startDate = {startDate}
+        endDate = {endDate} />
+        
+        <style jsx>{`
+        .container {
+          position : relative;
+          top : -38px;
+          left : 70px;
+          display : block;
+          margin: 0.5rem;
+          font-size : 18px;
+
+        }
+      
+        `}</style>
+
+        </div>
+
+  <div className = "container">
+
+      <DatePicker 
+        dateFormat = "yyyy/MM/dd"
+        selected = {endDate}
+        onChange = {date => setEndDate(date)}
+        selectsEnd
+        endDate = {endDate}
+        minDate = {startDate} />
+        
+
+        <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 171px;
+          left : 350px;
+          margin: 0.5rem;
+          font-size : 18px;
+
+        }
+      
+        `}</style>
+
+
+      </div>
   </div>
   <br />
 
