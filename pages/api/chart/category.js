@@ -1,70 +1,136 @@
 import CryptoJS from "crypto-js";
 import axios from 'axios';
-import dbInit from "../dbInit.js";
 
 export default async function handler(req, res) {
-    dbInit();
-//   let keywords = req.query.words.replace(/ /g, '').split(',');
-//   if (keywords.length > 5) {
-//     return res.status(200).json({
-//         isSuccess : false,
-//         code : 4001,
-//         message : "키워드 갯수가 5개를 초과했습니다.",
-//     });
-//   } 
-//   const searchAllAmounts = [];
+  let keywords = req.query.words.replace(/ /g, '').split(',');
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
 
-//   const adSearchData = await getAdSearchData(keywords);
-//   const keywordAllRatios = [];
+  if (keywords.length > 5) {
+    return res.status(200).json({
+        isSuccess : false,
+        code : 4001,
+        message : "키워드 갯수가 5개를 초과했습니다.",
+    });
+  }
 
-//   keywords = [];
-//   adSearchData.forEach(obj => {
-//     keywords.push(obj.relKeyword);
-//     searchAllAmounts.push(obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt)
-//   });
+  const [absoluteValuePerOneRatio, changedKeywords] = await getAbsolutesPerOneRatio(keywords);
+  const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, absoluteValuePerOneRatio);
 
-//   const trendAnalysisData = await getTrendAnalysisData(keywords);
+  // const searchAllAmounts = [];
 
-//   trendAnalysisData.results.forEach(obj => {
-//     let allRatio = 0;
-//     obj.data.forEach(data => {
-//       allRatio += data.ratio;
-//     })
-//     keywordAllRatios.push(allRatio);
-//   });
+  // const keywordAllRatios = [];
 
-//   const searchEachAmounts = [];
+  // keywords = [];
+  // const adSearchData = await getAdSearchData(keywords);
+  // adSearchData.forEach(obj => {
+  //   keywords.push(obj.relKeyword);
+  //   searchAllAmounts.push(obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt)
+  // });
+
+  // const [start, end] = getLastMonthDate();
+
+  // const trendAnalysisData = await getTrendAnalysisData(start, end, keywords);
+
+  // trendAnalysisData.results.forEach(obj => {
+  //   let allRatio = 0;
+  //   obj.data.forEach(data => {
+  //     allRatio += data.ratio;
+  //   })
+  //   keywordAllRatios.push(allRatio);
+  // });
+
+  // const searchEachAmounts = [];
   
-//   keywords.forEach((keyword, index) => {
-//     const keywordAmountArray = [];
-//     trendAnalysisData.results[index].data.forEach(data => {
-//       keywordAmountArray.push({
-//         period : data.period,
-//         amount : (data.ratio / keywordAllRatios[index]) * searchAllAmounts[index]
-//       })
-//     })
-//     searchEachAmounts.push({
-//       keyword : keyword,
-//       keywordAmountArray : keywordAmountArray
-//     })
-//   });
+  // keywords.forEach((keyword, index) => {
+  //   const keywordAmountArray = [];
+  //   trendAnalysisData.results[index].data.forEach(data => {
+  //     keywordAmountArray.push({
+  //       period : data.period,
+  //       amount : (data.ratio / keywordAllRatios[index]) * searchAllAmounts[index]
+  //     })
+  //   })
+  //   searchEachAmounts.push({
+  //     keyword : keyword,
+  //     keywordAmountArray : keywordAmountArray
+  //   })
+  // });
 
-//   const result = {
-//     startDate : trendAnalysisData.startDate,
-//     endDate : trendAnalysisData.endDate,
-//     searchKeywordInfos : searchEachAmounts
-//   };  
+  const result = {
+    startDate : trendAnalysisData.startDate,
+    endDate : trendAnalysisData.endDate,
+    searchKeywordInfos : absoluteValuesEachDate
+  };  
 
   return res.status(200).json({
       isSuccess : true,
       code : 1000,
       message : "성공",
-      result : "result"
+      result : result
   });
 
 }
 
-const getAdSearchData = async (hintKeywords) => {
+// 1ratio당 검색량을 구하는 부분
+const getAbsolutesPerOneRatio = async(keywords) => {
+  let result;
+  const [recentMonthAbsoluteValue, changedKeywords] = await getRecentMonthAllAbsoluteValue(keywords);
+  const recentMonthRatio = await getRecentMonthAllRatio(changedKeywords);
+  console.log(recentMonthAbsoluteValue);
+  console.log(recentMonthRatio);
+  result = recentMonthAbsoluteValue / recentMonthRatio;
+  console.log(result);
+  return [result, changedKeywords];
+}
+
+const getRecentMonthAllAbsoluteValue = async(keywords) => {
+  let result = 0;
+  const adSearchData = await getAdSearchData(keywords);
+  keywords = [];
+  adSearchData.forEach(obj => {
+    keywords.push(obj.relKeyword);
+    result += obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt;
+  });
+  return [result, keywords];
+}
+
+const getRecentMonthAllRatio = async(keywords) => {
+  let result = 0;
+  const [start, end] = getLastMonthDate();
+  const recentMonthTrendAnalysisData = await getTrendAnalysisData(start, end, keywords);
+  recentMonthTrendAnalysisData.results.forEach(keywordInfo => {
+    let allRatio = 0;
+    keywordInfo.data.forEach(data => {
+      allRatio += data.ratio;
+    })
+    result += allRatio;
+  })
+  
+  return result;
+}
+
+const getAbsoluteValuesEachDate = async(startDate, endDate, keywords, absoluteValuePerOneRatio) => {
+  const trendAnalysisData = await getTrendAnalysisData(startDate, endDate, keywords);
+
+  const result = [];
+  
+  keywords.forEach((keyword, index) => {
+    const keywordAmountArray = [];
+    trendAnalysisData.results[index].data.forEach(data => {
+      keywordAmountArray.push({
+        period : data.period,
+        amount : data.ratio * absoluteValuePerOneRatio
+      })
+    })
+    result.push({
+      keyword : keyword,
+      keywordAmountArray : keywordAmountArray
+    })
+  });
+
+}
+
+const getAdSearchData = async(hintKeywords) => {
   const method = "GET";
   const timestamp = Date.now() + '';
   const api_url = "/keywordstool";
@@ -93,10 +159,10 @@ const getAdSearchData = async (hintKeywords) => {
 
 }
 
-const getTrendAnalysisData = async(keywords) => {
-  const keywordGroups = [];
 
-  const [start, end] = getLastMonthDate();
+
+const getTrendAnalysisData = async(startDate, endDate, keywords) => {
+  const keywordGroups = [];
 
   keywords.forEach(keyword => {
     keywordGroups.push({
@@ -107,8 +173,8 @@ const getTrendAnalysisData = async(keywords) => {
 
   try {
     const request_body = {
-      startDate: start,
-      endDate: end,
+      startDate: startDate,
+      endDate: endDate,
       timeUnit: "date",
       keywordGroups: keywordGroups,
     };
@@ -150,3 +216,14 @@ const getLastMonthDate = () => {
 
   return [oneMonthAgoString, todayString];
 }
+
+
+/*
+
+- 한달 절댓값과 상댓값을 구하기
+- 상댓값 1에 절댓값 구하기
+- 트렌드 분석 API 원하는 기간으로 다시 호출
+- 각 날짜의 ratio에 상댓값 1당 구한 절댓값 곱해서 각 날짜의 검색량 구하기
+
+
+*/
