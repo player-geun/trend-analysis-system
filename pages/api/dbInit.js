@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 export default function init () {
-    console.log("INIT START");
     mongoose.connect('mongodb://13.125.244.255:27017/trend-analysis');
     const db = mongoose.connection;
 

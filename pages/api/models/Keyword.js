@@ -15,7 +15,6 @@ const KeywordSchema = mongoose.Schema({
     }
 });
 
-// Student
 mongoose.models = {};
 const model = mongoose.model('Keyword', KeywordSchema);
 
