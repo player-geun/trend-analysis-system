@@ -9,8 +9,8 @@ export default function Graph(props) {
     Chart.register(CategoryScale);
 
     const Container = styled.div`
-        width: 90vw;
-        max-width: 900px;
+        width: 200vw;
+        max-width: 1100px;
     `;
 
     const options = {
@@ -26,7 +26,7 @@ export default function Graph(props) {
               usePointStyle: true,
               padding: 10,
               font: {
-                family: "'Noto Sans KR', 'serif'",
+                family: "'NanumSquare', 'serif'",
                 lineHeight: 1,
               },
             }
@@ -37,13 +37,13 @@ export default function Graph(props) {
             bodySpacing: 5,
             bodyFont: {
               font: {
-                family: "'Noto Sans KR', sans-serif",
+                family: "'NanumSquare', sans-serif",
               }
             },
             usePointStyle: true,
             filter: (item) => item.parsed.ratio !== null,
             callbacks: {
-              title: (context) => context[0].label + '💙',
+              title: (context) => context[0].label ,
               label: (context) => {
                 let label = context.dataset.label + '' || '';
       
@@ -98,8 +98,8 @@ export default function Graph(props) {
               color: '#808080',
               font: {
                 size: 12,
-                family: "'Noto Sans KR', sans-serif",
-                weight: 300,
+                family: "'NanumSquare', sans-serif",
+                weight: 400,
               },
               text: '단위: 배'
             }
