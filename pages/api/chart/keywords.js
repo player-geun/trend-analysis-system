@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   if (keywords.length > 5) {
     return res.status(200).json({
         isSuccess : false,
-        code : 4001,
+        code : 2001,
         message : "키워드 갯수가 5개를 초과했습니다.",
     });
   }

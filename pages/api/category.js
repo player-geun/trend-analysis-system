@@ -11,7 +11,6 @@ export default async function handler(req, res) {
     if (apiMethod == "POST") {
         const isSuccess = await saveKeywords(reqBody);
 
-        console.log(isSuccess);
         if(isSuccess) {
             res.status(200).json({ 
                 isSuccess : true,
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
             res.status(200).json({ 
                 isSuccess : false,
                 code: 4000,
-                message: "카테고리 등록에 실패했습니다."
+                message: "데이터베이스 에러."
             })
         }
     } else {

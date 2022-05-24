@@ -15,8 +15,8 @@ export default async function handler(req, res) {
   if(keywordModels.length == 0) {
     return res.status(200).json({ 
         isSuccess : false,
-        code: 4000,
-        message: `데이터베이스에서 ${categoryName} 카테고리를 찾을 수 없습니다.`
+        code: 3000,
+        message: `${categoryName} 카테고리를 찾을 수 없습니다.`
     });
   } else {
     keywordModels.forEach(model => {
