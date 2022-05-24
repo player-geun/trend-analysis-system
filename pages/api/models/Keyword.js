@@ -5,7 +5,7 @@ const KeywordSchema = mongoose.Schema({
         type: String
     },
     categoryName : {
-        type : Number
+        type : String
     },
     keywordAmounts : {
         type: Array
