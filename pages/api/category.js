@@ -1,3 +1,4 @@
+// 카테고리 저장 api
 import dbInit from "./dbInit.js";
 import keywordModel from "./models/Keyword.js";
 
