@@ -6,10 +6,12 @@ export default async function handler(req, res) {
   const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
   const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
 
+
   const startDateTest = req.query.startDate.split('/');
   const endDateTest = req.query.endDate.split('/');
   
   //키워드 5개 이상 입력했을 때 오류
+
   if (keywords.length > 5) {
     return res.status(200).json({
         isSuccess : false,
@@ -53,10 +55,12 @@ export default async function handler(req, res) {
   // }
 
  
-  
+ 
 
   const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
   const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
+
+
   
   const result = {
     startDate : startDate,
@@ -65,13 +69,14 @@ export default async function handler(req, res) {
   };  
 
 
+
   return res.status(200).json({
       isSuccess : true,
       code : 1000,
       message : "성공",
       result : result
   });
-  
+
 
 }
 
