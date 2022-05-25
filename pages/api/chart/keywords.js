@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     console.log("4")
     return res.status(200).json({
       isSuccess : false,
-      code : 2001,
+      code : 2002,
       message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     console.log("2")
     return res.status(200).json({
       isSuccess : false,
-      code : 2001,
+      code : 2002,
       message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     console.log("3")
     return res.status(200).json({
       isSuccess : false,
-      code : 2001,
+      code : 2002,
       message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
