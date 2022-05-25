@@ -8,9 +8,6 @@ import Router from 'next/router';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
-import {getTrendAnalysisData} from "../../pages/api/chart/keywords"
-
-
 export function SearchKeyword(props) {
 
       
@@ -101,17 +98,7 @@ export function SearchKeyword(props) {
         chartDataList[i] = getConvertToXY(searchDataList[i]);
       }
 
-      //const idx1= searchData.data.result.searchKeywordInfos.findIndex(x => x.keyword === stateArr[0]);
-     // const idx2= searchData.data.result.searchKeywordInfos.findIndex(x => x.keyword === stateArr[1]);
-      //const searchDataList1 = searchData.data.result.searchKeywordInfos[idx1].keywordAmountArray;
-      //const searchDataList2 = searchData.data.result.searchKeywordInfos[idx2].keywordAmountArray;
-      
-
-  
-      //let chartData1 = getConvertToXY(searchDataList1);
-     // let chartData2 = getConvertToXY(searchDataList2);
-
-     var ColorList = ['red','blue','green','black','yellow']
+     var ColorList = ['red','blue','green','black','yellow'] // 차트 선 색
 
      var FinalChartDataList = new Array();
      for (var i = 0; i < finalStateArr.length; i++) {
@@ -119,16 +106,13 @@ export function SearchKeyword(props) {
        chartDataList[i] = getConvertToXY(searchDataList[i]);
 
        FinalChartDataList[i]= {
-        id : i,
         type: 'line',
-        label: finalStateArr[i], //동적 변경 필요
+        label: finalStateArr[i], 
         borderColor: ColorList[i],
         borderWidth: 2,
         data: chartDataList[i]
       }
      }
-
-
 
 
       setGraphData(
