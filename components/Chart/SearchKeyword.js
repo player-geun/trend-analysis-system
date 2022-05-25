@@ -10,7 +10,12 @@ import "react-datepicker/dist/react-datepicker.css"
 
 export function SearchKeyword(props) {
 
-      
+  
+/*조회일자*/
+let month = new Date().getMonth();
+const [startDate,setStartDate] = useState(new Date(new Date().setMonth(month - 1))); //시작 날짜 default : 한 달전
+const [endDate,setEndDate] = useState(new Date());
+
 /*키워드*/
   const [state1,SetState1] = useState('');
   const [state2,SetState2] = useState('');
@@ -54,9 +59,6 @@ export function SearchKeyword(props) {
     }
   }
 
-/*조회일자*/
-  const [startDate,setStartDate] = useState(new Date());
-  const [endDate,setEndDate] = useState(new Date());
 
   
 /* 차트 */
@@ -78,13 +80,16 @@ export function SearchKeyword(props) {
     const postAPI = async() => {
 
       const finalStateArr = stateArr.filter((x) => x !== '');
-      let res= finalStateArr.join();
-      console.log("res:"+res)
-      let url = "/api/chart/keywords?words="+res;
+      let words= finalStateArr.join();
+      
+      let selectedStartDate = [startDate.getFullYear(), (startDate.getMonth()+1) < 10 ? "0" + (startDate.getMonth()+1) : (startDate.getMonth()+1), (startDate.getDate()) < 10 ? "0" + (startDate.getDate()) : (startDate.getDate())];
+      let selectedEndDate = [endDate.getFullYear(),(endDate.getMonth()+1) < 10 ? "0" + (endDate.getMonth()+1) : (endDate.getMonth()+1), (endDate.getDate()) < 10 ? "0" + (endDate.getDate()) : (endDate.getDate())];
+      let finalStartDate = selectedStartDate[0]+"/"+selectedStartDate[1]+"/"+selectedStartDate[2];
+      let finalEndDate = selectedEndDate[0]+"/"+selectedEndDate[1]+"/"+selectedEndDate[2];
+
+      let url = "/api/chart/keywords?"+"startDate="+finalStartDate+"&endDate="+finalEndDate+"&words="+words;
+
       console.log("url:"+url)
-
-     
-
 
       const searchData = await axios.get(url); //api 호출 데이터
 
@@ -177,6 +182,21 @@ return (
         `}</style>
 
         </div>
+
+        <div className = "container">
+          <a>~</a>
+          <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 165px;
+          left : 325px;
+          margin: 0.5rem;
+          font-size : 30px;
+        }
+        `}</style>
+        </div>
+    
 
   <div className = "container">
 
