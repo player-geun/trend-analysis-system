@@ -119,6 +119,7 @@ export function SearchKeyword(props) {
        chartDataList[i] = getConvertToXY(searchDataList[i]);
 
        FinalChartDataList[i]= {
+        id : i,
         type: 'line',
         label: finalStateArr[i], //동적 변경 필요
         borderColor: ColorList[i],

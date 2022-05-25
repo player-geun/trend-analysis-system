@@ -44,12 +44,16 @@ export default function Graph(props) {
             filter: (item) => item.parsed.ratio !== null,
             callbacks: {
               title: (context) => context[0].label ,
-              label: (context) => {
-                let label = context.dataset.label + '' || '';
-      
-                return context.parsed.ratio !== null
-                  ? label + ': ' + context.parsed.ratio + '배'
-                  : null;
+              label: function(context) {
+                let label = context.dataset.label || '';
+
+                if (label) {
+                    label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                    label += context.parsed.y;
+                }
+                return label;
               },
             },
           },
