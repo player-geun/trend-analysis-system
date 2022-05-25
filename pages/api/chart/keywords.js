@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       isSuccess : false,
       code : 2001,
-      message : "날짜를 똑바로 입력해주세요",
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
   if(startDateTest[0] === endDateTest[0] && startDateTest[1]>endDateTest[1]){
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       isSuccess : false,
       code : 2001,
-      message : "날짜를 똑바로 입력해주세요.",
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
   if(startDateTest[1] == endDateTest[1] && startDateTest[2] > endDateTest[2]){
@@ -41,18 +41,10 @@ export default async function handler(req, res) {
     return res.status(200).json({
       isSuccess : false,
       code : 2001,
-      message : "날짜를 똑바로 입력해주세요.",
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
     });
   }
 
-  // if(keywords == null){
-  //   console.log("키워드를 입력하세요")
-  //   return res.status(200).json({
-  //     isSuccess : false,
-  //     code : 2001,
-  //     message : "키워드 갯수가 0개를 초과했습니다.",
-  //   });
-  // }
 
  
  
