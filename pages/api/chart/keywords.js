@@ -5,56 +5,24 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   let keywords = req.query.words.replace(/ /g, '').split(',');
+  const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
+  const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
+
   if (keywords.length > 5) {
     return res.status(200).json({
         isSuccess : false,
-        code : 4001,
+        code : 2001,
         message : "키워드 갯수가 5개를 초과했습니다.",
     });
-  } 
-  const searchAllAmounts = [];
+  }
 
-  const adSearchData = await getAdSearchData(keywords);
-  const keywordAllRatios = [];
-
-  // 네이버 광고 검색 API의 결과순서가 입력 키워드의 순서랑 다름. 
-  // 트렌드 분석 API에서 검색 광고 결과와 똑같은 순서로 요청하기 위해 아래 코드 작성 함.
-  keywords = [];
-  adSearchData.forEach(obj => {
-    keywords.push(obj.relKeyword);
-    searchAllAmounts.push(obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt)
-  });
-
-  const trendAnalysisData = await getTrendAnalysisData(keywords);
-
-  trendAnalysisData.results.forEach(obj => {
-    let allRatio = 0;
-    obj.data.forEach(data => {
-      allRatio += data.ratio;
-    })
-    keywordAllRatios.push(allRatio);
-  });
-
-  const searchEachAmounts = [];
-  
-  keywords.forEach((keyword, index) => {
-    const keywordAmountArray = [];
-    trendAnalysisData.results[index].data.forEach(data => {
-      keywordAmountArray.push({
-        period : data.period,
-        amount : (data.ratio / keywordAllRatios[index]) * searchAllAmounts[index]
-      })
-    })
-    searchEachAmounts.push({
-      keyword : keyword,
-      keywordAmountArray : keywordAmountArray
-    })
-  });
+  const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
+  const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
 
   const result = {
-    startDate : trendAnalysisData.startDate,
-    endDate : trendAnalysisData.endDate,
-    searchKeywordInfos : searchEachAmounts
+    startDate : startDate,
+    endDate : endDate,
+    searchKeywordInfos : absoluteValuesEachDate
   };  
 
   return res.status(200).json({
@@ -64,15 +32,70 @@ export default async function handler(req, res) {
       result : result
   });
 
-//   return res.status(403).json({
-//     isSuccess : true,
-//     code : 2000,
-//     message : "데이터 호출에 실패했습니다."
-//   })
+}
+
+// 1ratio당 검색량을 구하는 부분
+const getAbsolutesPerOneRatio = async(startDate, endDate, keywords) => {
+  let result;
+  // 검색광고
+  const [recentMonthAbsoluteValue, changedKeywords] = await getRecentMonthAllAbsoluteValue(keywords);
+  // 트렌드 분석
+  const [recentMonthRatio, trendAnalysisData] = await getRecentMonthAllRatio(startDate, changedKeywords);
+  result = recentMonthAbsoluteValue / recentMonthRatio;
+  return [result, trendAnalysisData, changedKeywords];
+}
+
+const getRecentMonthAllAbsoluteValue = async(keywords) => {
+  let result = 0;
+  const adSearchData = await getAdSearchData(keywords);
+  keywords = [];
+  adSearchData.forEach(obj => {
+    keywords.push(obj.relKeyword);
+    result += obj.monthlyPcQcCnt + obj.monthlyMobileQcCnt;
+  });
+  return [result, keywords];
+}
+
+const getRecentMonthAllRatio = async(startDate, keywords) => {
+  let result = 0;
+  // 트렌드 분석 API 호출은 조회 시작 날짜로 부터 오늘까지의 데이터를 호출.
+  const trendAnalysisData = await getTrendAnalysisData(startDate, getTodayDate(), keywords);
+  trendAnalysisData.results.forEach(keywordInfo => {
+    let allRatio = 0;
+    const startToTodayLength = keywordInfo.data.length;
+    keywordInfo.data.slice(startToTodayLength - 31, startToTodayLength).forEach(data => {
+      allRatio += data.ratio;
+    })
+    result += allRatio;
+  })
+  
+  return [result, trendAnalysisData];
+}
+
+// 조회기간에서 각 날짜당 검색량을 구하는 부분
+const getAbsoluteValuesEachDate = async(startDate, endDate, keywords, trendAnalysisData, absoluteValuePerOneRatio) => {
+  const result = [];
+  
+  keywords.forEach((keyword, index) => {
+    const keywordAmountArray = [];
+    trendAnalysisData.results[index].data.slice(0, getDiffBetweenTwoDates(startDate, endDate)).forEach(data => {
+      keywordAmountArray.push({
+        period : data.period,
+        ratio : data.ratio,
+        amount : data.ratio * absoluteValuePerOneRatio
+      })
+    })
+    result.push({
+      keyword : keyword,
+      keywordAmountArray : keywordAmountArray
+    })
+  });
+
+  return result;
 
 }
 
-const getAdSearchData = async (hintKeywords) => {
+const getAdSearchData = async(hintKeywords) => {
   const method = "GET";
   const timestamp = Date.now() + '';
   const api_url = "/keywordstool";
@@ -101,10 +124,10 @@ const getAdSearchData = async (hintKeywords) => {
 
 }
 
-const getTrendAnalysisData = async(keywords) => {
-  const keywordGroups = [];
 
-  const [start, end] = getLastMonthDate();
+
+const getTrendAnalysisData = async(startDate, endDate, keywords) => {
+  const keywordGroups = [];
 
   keywords.forEach(keyword => {
     keywordGroups.push({
@@ -115,8 +138,8 @@ const getTrendAnalysisData = async(keywords) => {
 
   try {
     const request_body = {
-      startDate: start,
-      endDate: end,
+      startDate: startDate,
+      endDate: endDate,
       timeUnit: "date",
       keywordGroups: keywordGroups,
     };
@@ -132,15 +155,15 @@ const getTrendAnalysisData = async(keywords) => {
     const result = await axios.post(url, request_body, {
         headers: headers,
     });
-    
+
     return result.data;
 
     } catch(error){
-      console.log(error);
+      // console.log(error);
     }
 }
 
-const getLastMonthDate = () => {
+const getTodayDate = () => {
   const today = new Date();
 
   const year = today.getFullYear();
@@ -149,12 +172,25 @@ const getLastMonthDate = () => {
 
   const todayString = year + '-' + month  + '-' + day;
 
-  const oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
-  const agoYear = oneMonthAgo.getFullYear();
-  const agoMonth = ('0' + (oneMonthAgo.getMonth() + 1)).slice(-2);
-  const agoDay = ('0' + oneMonthAgo.getDate()).slice(-2);
-
-  const oneMonthAgoString = agoYear + '-' + agoMonth  + '-' + agoDay;
-
-  return [oneMonthAgoString, todayString];
+  return todayString;
 }
+
+const getDiffBetweenTwoDates = (_date1, _date2) => {
+  const date1 = new Date(_date1);
+  const date2 = new Date(_date2);
+
+  const diffDate = date1.getTime() - date2.getTime();
+  const dateDays = Math.abs(diffDate / (1000 * 3600 * 24));
+  
+  return dateDays + 1;
+}
+
+
+/*
+
+- 한달 절댓값과 상댓값을 구하기
+- 상댓값 1에 절댓값 구하기
+- 트렌드 분석 API 원하는 기간으로 다시 호출
+- 각 날짜의 ratio에 상댓값 1당 구한 절댓값 곱해서 각 날짜의 검색량 구하기
+
+*/
