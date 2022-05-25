@@ -8,6 +8,12 @@ export default async function handler(req, res) {
   const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
   const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
 
+
+  const startDateTest = req.query.startDate.split('/');
+  const endDateTest = req.query.endDate.split('/');
+  
+  //키워드 5개 이상 입력했을 때 오류
+
   if (keywords.length > 5) {
     return res.status(200).json({
         isSuccess : false,
@@ -15,15 +21,48 @@ export default async function handler(req, res) {
         message : "키워드 갯수가 5개를 초과했습니다.",
     });
   }
+  // 날짜 잘못 입력했을때
+  if(startDateTest[0] > endDateTest[0]){
+    console.log("4")
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+  if(startDateTest[0] === endDateTest[0] && startDateTest[1]>endDateTest[1]){
+    console.log("2")
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+  if(startDateTest[1] == endDateTest[1] && startDateTest[2] > endDateTest[2]){
+    console.log("3")
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+
+
+ 
+ 
 
   const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
   const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
 
+
+  
   const result = {
     startDate : startDate,
     endDate : endDate,
     searchKeywordInfos : absoluteValuesEachDate
   };  
+
+
 
   return res.status(200).json({
       isSuccess : true,
@@ -31,6 +70,7 @@ export default async function handler(req, res) {
       message : "성공",
       result : result
   });
+
 
 }
 
@@ -119,6 +159,7 @@ const getAdSearchData = async(hintKeywords) => {
       'X-Signature': sig
     }
   });
+
 
   return await result.data.keywordList.slice(0, hintKeywords.length);
 
