@@ -7,8 +7,8 @@ import ChartViewButton from '../components/Button/ChartViewButton'
 import KeywordHandleButton from '../components/Button/KeywordHandleButton'
 import KeywordModifyButton from '../components/Button/KeywordModifyButton'
 import KeywordRegStatButton from '../components/Button/KeywordRegStatButton'
-import 'bootstrap/dist/css/bootstrap.css';
-import { auto, right } from '@popperjs/core'
+// import 'bootstrap/dist/css/bootstrap.css';
+// import { auto, right } from '@popperjs/core'
 
 export default function Home() {
 

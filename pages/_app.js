@@ -5,7 +5,7 @@ function MyApp({ Component, pageProps }) {
   return(
     <>
       <Head>
-      <title>몽고 디비 사용해보기</title>
+      <title>트렌드 분석 시스템</title>
       </Head>
    
     <Component{...pageProps}/>
