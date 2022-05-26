@@ -110,9 +110,9 @@ export function SearchAttribute(props) {
 
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
-  <div class = "mx-3">
-      <a class = "mx-0"> 구분 </a>
-      <input class = "mx-3"
+  <div className = "mx-3">
+      <a className = "mx-0"> 구분 </a>
+      <input className = "mx-3"
         type = "radio"
         value = "1"
         checked = {classification === "1"}
@@ -121,7 +121,7 @@ return (
       <label>
         1. 키워드
       </label>
-      <input class = "mx-3"
+      <input className = "mx-3"
         type = "radio"
         value = "2"
         checked = {classification === "2"}
@@ -133,7 +133,7 @@ return (
   </div>
   <br />
 
-  <div class = "mx-3">
+  <div className = "mx-3">
   <a> 조회일자  </a>
       <div className = "container">
  
@@ -190,31 +190,31 @@ return (
   <br />
 
 
-  <div class = "mx-3"> 
-  <form class="form-inline" >
+  <div className = "mx-3"> 
+  <form className="form-inline" >
     <a> 키워드 속성 </a>
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성 1" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성 1" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword1}/>
     
-   <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 2" aria-label="Search" 
+   <input className="form-control mr-sm-2" type="search" placeholder="#키워드 속성 2" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px' }}
            value={state.name} //입력되는 값.
            onChange={handleKeyword2}/>
            
-    <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 3" aria-label="Search" 
+    <input className="form-control mr-sm-2" type="search" placeholder="#키워드 속성 3" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword3}/>
     
-    <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 4" aria-label="Search" 
+    <input className="form-control mr-sm-2" type="search" placeholder="#키워드 속성 4" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword4}/>
 
 
-    <button type = "button" class="btn btn-outline-primary my-2 my-sm-0" 
+    <button type = "button" className="btn btn-outline-primary my-2 my-sm-0" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }}
             onClick={postAPI}>검색</button>
   </form>

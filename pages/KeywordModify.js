@@ -20,23 +20,23 @@ export default function KeywordModify() {
 
               <ul className="nav nav-tabs" style={{ fontFamily : 'NanumSquare' }}>
                  <li className="nav-item">
-                  <a className="nav-link" href="/">Main</a>
+                  <Link className="nav-link" href="/">Main</Link>
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/ChartView_K">차트 조회</a>
+                  <Link className="nav-link" href="/ChartView_K">차트 조회</Link>
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/KeywordHandle">키워드 조회/등록/삭제</a>
+                  <Link className="nav-link" href="/KeywordHandle">키워드 조회/등록/삭제</Link>
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link active font-weight-bold" href="/KeywordModify">키워드 정정</a>
+                  <Link className="nav-link active font-weight-bold" href="/KeywordModify">키워드 정정</Link>
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/KeywordRegStat">키워드 등록 현황</a>
+                  <Link className="nav-link" href="/KeywordRegStat">키워드 등록 현황</Link>
                 </li>
               </ul>
             

@@ -27,27 +27,27 @@ export function Modify(props) {
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
 
-  <div class = "mx-3"> 
-  <form class="form-inline" >
+  <div className = "mx-3"> 
+  <form className="form-inline" >
     <a> 키워드 </a>
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword1}/>
   
     <br />
 
-    <a class = "mx-1"> 키워드 속성</a>
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+    <a className = "mx-1"> 키워드 속성</a>
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state.name} //입력되는 값.
            onChange={handleKeyword2}/>
 
 
-    <div class = "mx-4">
-        <button type = "button" class="btn btn-outline-primary mx-2" 
+    <div className = "mx-4">
+        <button type = "button" className="btn btn-outline-primary mx-2" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }} > 조회 </button>
-        <button type = "button" class="btn btn-outline-primary mx-2" 
+        <button type = "button" className="btn btn-outline-primary mx-2" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }} > 정정 </button>
 </div>
 

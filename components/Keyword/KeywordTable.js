@@ -40,7 +40,7 @@ export function KeywordTable(props) {
             keywordVolume: '50,000',
             keywordAttr:'#대분류 #액세서리',
             regDate:'2022.04.20',
-            isDelete : <button type="button" class="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
+            isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
         },
         {
             id: 2,
@@ -48,7 +48,7 @@ export function KeywordTable(props) {
             keywordVolume: '30,000',
             keywordAttr:'#가방',
             regDate:'2022.04.20',
-            isDelete : <button type="button" class="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
+            isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
         },
     ]
 
@@ -101,31 +101,31 @@ export function KeywordTable(props) {
         return (
             <div style={{ fontFamily : 'NanumSquare'}}>
         
-            <div class = "mx-3"> 
-            <form class="form-inline" >
+            <div className = "mx-3"> 
+            <form className="form-inline" >
               <a> 키워드 </a>
-              <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
+              <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
                      style={{ width : '200px', height : '50px',  fontSize : '20px'}}
                      value={state.name} //입력되는 값.
                      onChange={handleKeyword1}/>
            
               <br />
           
-              <a class = "mx-1"> 키워드 속성</a>
-              <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+              <a className = "mx-1"> 키워드 속성</a>
+              <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
                      style={{ width : '200px', height : '50px',  fontSize : '20px'}}
                      value={state.name} //입력되는 값.
                      onChange={handleKeyword2}/>
           
           
-              <div class = "mx-4">
-                  <button type = "button" class="btn btn-outline-primary mx-2" 
+              <div className = "mx-4">
+                  <button type = "button" className="btn btn-outline-primary mx-2" 
                       style={{ width : '100px', height : '50px',  fontSize : '20px' }}
                       onClick = {handleViewButton}> 조회 </button>
-                  <button type = "button" class="btn btn-outline-primary mx-2" 
+                  <button type = "button" className="btn btn-outline-primary mx-2" 
                       style={{ width : '100px', height : '50px',  fontSize : '20px' }}
                       onClick = {handleRegButton} > 등록 </button>
-                  <button type = "button" class="btn btn-outline-primary mx-2" 
+                  <button type = "button" className="btn btn-outline-primary mx-2" 
                       style={{ width : '100px', height : '50px',  fontSize : '20px' }} > 삭제 </button>
           
           </div>
@@ -150,31 +150,31 @@ else{
     return (
     <div style={{ fontFamily : 'NanumSquare'}}>
 
-    <div class = "mx-3"> 
-    <form class="form-inline" >
+    <div className = "mx-3"> 
+    <form className="form-inline" >
       <a> 키워드 </a>
-      <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
+      <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 입력" aria-label="Search" 
              style={{ width : '200px', height : '50px',  fontSize : '20px'}}
              value={state.name} //입력되는 값.
              onChange={handleKeyword1}/>
    
       <br />
   
-      <a class = "mx-1"> 키워드 속성</a>
-      <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+      <a className = "mx-1"> 키워드 속성</a>
+      <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
              style={{ width : '200px', height : '50px',  fontSize : '20px'}}
              value={state.name} //입력되는 값.
              onChange={handleKeyword2}/>
   
   
-      <div class = "mx-4">
-          <button type = "button" class="btn btn-outline-primary mx-2" 
+      <div className = "mx-4">
+          <button type = "button" className="btn btn-outline-primary mx-2" 
               style={{ width : '100px', height : '50px',  fontSize : '20px' }}
               onClick = {handleViewButton}> 조회 </button>
-          <button type = "button" class="btn btn-outline-primary mx-2" 
+          <button type = "button" className="btn btn-outline-primary mx-2" 
               style={{ width : '100px', height : '50px',  fontSize : '20px' }}
               onClick = {handleRegButton} > 등록 </button>
-          <button type = "button" class="btn btn-outline-primary mx-2" 
+          <button type = "button" className="btn btn-outline-primary mx-2" 
               style={{ width : '100px', height : '50px',  fontSize : '20px' }} > 삭제 </button>
   
   </div>
