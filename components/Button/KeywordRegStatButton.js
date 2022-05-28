@@ -17,8 +17,8 @@ const KeywordRegStatButton = (props) => {
     return (
         <div>
 
-        <Link href="/KeywordRegStat">
-        <button type="button" class="btn btn-primary btn-lg" style={{ fontFamily : 'NanumSquare' }}>키워드 등록 현황</button>
+        <Link href="/KeywordRegStat_K">
+        <button type="button" className="btn btn-primary btn-lg" style={{ fontFamily : 'NanumSquare' }}>키워드 등록 현황</button>
         </Link>
   
 

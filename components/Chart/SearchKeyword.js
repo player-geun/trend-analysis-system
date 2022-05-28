@@ -77,7 +77,7 @@ const [endDate,setEndDate] = useState(new Date());
   
 
 /*검색 버튼 클릭 api */
-    const postAPI = async() => {
+    const searchAPI = async() => {
 
       const finalStateArr = stateArr.filter((x) => x !== '');
       let words= finalStateArr.join();
@@ -89,10 +89,10 @@ const [endDate,setEndDate] = useState(new Date());
 
       let url = "/api/chart/keywords?"+"startDate="+finalStartDate+"&endDate="+finalEndDate+"&words="+words;
 
-      console.log("url:"+url)
+      console.log("url:"+ url)
 
       const searchData = await axios.get(url); //api 호출 데이터
-
+      
       //인덱스 할당
       var idxArr = new Array(); 
       var searchDataList = new Array();
@@ -103,7 +103,7 @@ const [endDate,setEndDate] = useState(new Date());
         chartDataList[i] = getConvertToXY(searchDataList[i]);
       }
 
-     var ColorList = ['red','blue','green','black','yellow'] // 차트 선 색
+     var ColorList = ['red','blue','green','orange','yellow'] // 차트 선 색
 
      var FinalChartDataList = new Array();
      for (var i = 0; i < finalStateArr.length; i++) {
@@ -119,7 +119,6 @@ const [endDate,setEndDate] = useState(new Date());
       }
      }
 
-
       setGraphData(
         {
           datasets: FinalChartDataList
@@ -133,9 +132,9 @@ const [endDate,setEndDate] = useState(new Date());
 
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
-  <div class = "mx-3">
-      <a class = "mx-0"> 구분 </a>
-      <input class = "mx-3"
+  <div className = "mx-3">
+      <a className = "mx-0"> 구분 </a>
+      <input className = "mx-3"
         type = "radio"
         value = "1"
         checked = {classification === "1"}
@@ -144,7 +143,7 @@ return (
       <label>
         1. 키워드
       </label>
-      <input class = "mx-3"
+      <input className = "mx-3"
         type = "radio"
         value = "2"
         checked = {classification === "2"}
@@ -156,7 +155,7 @@ return (
   </div>
   <br />
 
-  <div class = "mx-3">
+  <div className = "mx-3">
   <a> 조회일자  </a>
       <div className = "container">
  
@@ -189,7 +188,7 @@ return (
         .container {
           display : block;
           position : absolute;
-          top : 165px;
+          top : 150px;
           left : 325px;
           margin: 0.5rem;
           font-size : 30px;
@@ -213,10 +212,10 @@ return (
         .container {
           display : block;
           position : absolute;
-          top : 171px;
+          top : 155px;
           left : 350px;
           margin: 0.5rem;
-          font-size : 18px;
+          font-size : 19px;
 
         }
       
@@ -228,37 +227,37 @@ return (
   <br />
 
 
-  <div class = "mx-3"> 
-  <form class="form-inline" >
+  <div className = "mx-3"> 
+  <form className="form-inline" >
     <a> 키워드 </a>
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 1" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 1" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state1.name} //입력되는 값.
            onChange={handleKeyword1}/>
     
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 2" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 2" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state2.name} //입력되는 값.
            onChange={handleKeyword2}/>
 
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 3" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 3" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state3.name} //입력되는 값.
            onChange={handleKeyword3}/>
 
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 4" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 4" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state4.name} //입력되는 값.
            onChange={handleKeyword4}/>
 
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 5" aria-label="Search" 
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 5" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
            value={state5.name} //입력되는 값.
            onChange={handleKeyword5}/>
  
-    <button type = "button" class="btn btn-outline-primary my-2 my-sm-0" 
+    <button type = "button" className="btn btn-outline-primary my-2 my-sm-0" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-            onClick={postAPI}>검색</button>
+            onClick={searchAPI}>검색</button>
   </form>
   </div>
   <br />

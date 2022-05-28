@@ -8,91 +8,27 @@ import Router from 'next/router';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
-
 export function SearchAttribute(props) {
 
+  
+/*조회일자*/
+let month = new Date().getMonth();
+const [startDate,setStartDate] = useState(new Date(new Date().setMonth(month - 1))); //시작 날짜 default : 한 달전
+const [endDate,setEndDate] = useState(new Date());
 
-      //데이터    
-      let url = "/api/chart/keywords?words=강아지,고양이";
+/*키워드*/
+  const [state1,SetState1] = useState('');
 
-      const [graphData, setGraphData] = useState({datasets : [ { type: '', label: '', borderColor: '',borderWidth: 0, data: [] } ] } )
-  
-      //데이터 변환
-      const getConvertToXY = (array) =>{
-          var resArr = [];
-      
-          array.forEach(element => {
-            resArr.push({x: element.period, y: element.amount});
-          });
-      
-          return resArr;
-        }
-    
-      const postAPI = async() => {
-        const searchData = await axios.get("/api/chart/keywords?words=강아지,고양이");
-        const searchDataList1 = searchData.data.result.searchKeywordInfos[0].keywordAmountArray;
-        const searchDataList2 = searchData.data.result.searchKeywordInfos[1].keywordAmountArray;
-        //const item = searchDataList1.map((i => (console.log(i.period, i.amount))));
-     
-       // let res1 = searchDataList.map((i => (i.amount)));
-       // let res1title = searchDataList.map((i => (i.period)));
-  
-        
-  
-        let res1 = getConvertToXY(searchDataList1);
-        let res2 = getConvertToXY(searchDataList2);
-       
-  
-  
-    
-        setGraphData(
-          {
-            // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            // labels 대신 아래와 같이 각각의 데이터의 x값을 개별적으로 전달해줍니다.
-            datasets: [
-              {
-                type: 'line',
-                label: "강아지", //동적 변경 필요
-                borderColor: 'rgb(54, 162, 235)',
-                borderWidth: 2,
-                data: res1,
-              },
-              {
-                  type: 'line',
-                  label: "고양이", //동적 변경 필요
-                  borderColor: 'red',
-                  borderWidth: 2,
-                  data: res2,
-                },
-            ]
-          }
-        );
-      
-  
-      }
+  const stateArr = [state1];
 
-
-
-  /*키워드*/
-  const [state,SetState] = useState('');
+ //'키워드 검색' handler
   const handleKeyword1 = (e) => {
     console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword2 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword3 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
-  }
-  const handleKeyword4 = (e) => {
-    console.log(e.target.value)
-    SetState(e.target.value)
+    SetState1(e.target.value)
   }
 
-  /*구분*/
+
+/*구분*/
   const [classification,SetClassification] = useState("2");
   const handleClickRadioButton = (e) => {
     console.log(e.target.value)
@@ -103,16 +39,71 @@ export function SearchAttribute(props) {
     }
   }
 
-  /*조회일자*/
-  const [startDate,setStartDate] = useState(new Date());
-  const [endDate,setEndDate] = useState(new Date());
+
+  
+/* 차트 */
+    const [graphData, setGraphData] = useState({datasets : [ { type: '', label: '', borderColor: '',borderWidth: 0, data: [] } ] } )
+
+    //데이터 변환
+    const getConvertToXY = (array) =>{
+        var resArr = [];
+    
+        array.forEach(element => {
+          resArr.push({x: element.period, y: element.amount});
+        });
+    
+        return resArr;
+      }
+  
+
+/*검색 버튼 클릭 api */
+const searchAPI = async() => {
+
+  let selectedStartDate = [startDate.getFullYear(), (startDate.getMonth()+1) < 10 ? "0" + (startDate.getMonth()+1) : (startDate.getMonth()+1), (startDate.getDate()) < 10 ? "0" + (startDate.getDate()) : (startDate.getDate())];
+  let selectedEndDate = [endDate.getFullYear(),(endDate.getMonth()+1) < 10 ? "0" + (endDate.getMonth()+1) : (endDate.getMonth()+1), (endDate.getDate()) < 10 ? "0" + (endDate.getDate()) : (endDate.getDate())];
+  let finalStartDate = selectedStartDate[0]+"/"+selectedStartDate[1]+"/"+selectedStartDate[2];
+  let finalEndDate = selectedEndDate[0]+"/"+selectedEndDate[1]+"/"+selectedEndDate[2];
+  let url = "http://localhost:3000/api/chart/category?startDate="+finalStartDate+"&endDate="+finalEndDate+"&categoryName="+state1;
+
+  console.log("url:"+ url)
+
+  const searchData = await axios.get(url); //api 호출 데이터
+  console.log(searchData);
+
+
+ var searchDataList = new Array();
+ var chartDataList = new Array();
+ var ColorList = ['red','blue','green','orange','yellow'] // 차트 선 색
+
+
+var FinalChartDataList = new Array();
+for (var i = 0; i < searchData.data.result.searchKeywordInfos.length; i++) {
+
+  chartDataList[i] = getConvertToXY(searchData.data.result.searchKeywordInfos[i].keywordAmountArray);
+
+  FinalChartDataList[i]= {
+   type: 'line',
+   label: searchData.data.result.searchKeywordInfos[i].keyword, 
+   borderColor: ColorList[i],
+   borderWidth: 2,
+   data: chartDataList[i]
+ }
+}
+
+ setGraphData(
+   {
+     datasets: FinalChartDataList
+   }
+ );
+
+}
 
 
 return (
 <div style={{ fontFamily : 'NanumSquare' }}>
-  <div class = "mx-3">
-      <a class = "mx-0"> 구분 </a>
-      <input class = "mx-3"
+  <div className = "mx-3">
+      <a className = "mx-0"> 구분 </a>
+      <input className = "mx-3"
         type = "radio"
         value = "1"
         checked = {classification === "1"}
@@ -121,7 +112,7 @@ return (
       <label>
         1. 키워드
       </label>
-      <input class = "mx-3"
+      <input className = "mx-3"
         type = "radio"
         value = "2"
         checked = {classification === "2"}
@@ -133,7 +124,7 @@ return (
   </div>
   <br />
 
-  <div class = "mx-3">
+  <div className = "mx-3">
   <a> 조회일자  </a>
       <div className = "container">
  
@@ -160,6 +151,21 @@ return (
 
         </div>
 
+        <div className = "container">
+          <a>~</a>
+          <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 150px;
+          left : 325px;
+          margin: 0.5rem;
+          font-size : 30px;
+        }
+        `}</style>
+        </div>
+    
+
   <div className = "container">
 
       <DatePicker 
@@ -175,10 +181,10 @@ return (
         .container {
           display : block;
           position : absolute;
-          top : 171px;
+          top : 155px;
           left : 350px;
           margin: 0.5rem;
-          font-size : 18px;
+          font-size : 19px;
 
         }
       
@@ -190,33 +196,18 @@ return (
   <br />
 
 
-  <div class = "mx-3"> 
-  <form class="form-inline" >
-    <a> 키워드 속성 </a>
-    <input class="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성 1" aria-label="Search" 
+  <div className = "mx-3"> 
+  <form className="form-inline" >
+    <a> 키워드 속성</a>
+    <input className="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성" aria-label="Search" 
            style={{ width : '200px', height : '50px',  fontSize : '20px'}}
-           value={state.name} //입력되는 값.
+           value={state1.name} //입력되는 값.
            onChange={handleKeyword1}/>
     
-   <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 2" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px' }}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword2}/>
-           
-    <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 3" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px'}}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword3}/>
-    
-    <input class="form-control mr-sm-2" type="search" placeholder="#키워드 속성 4" aria-label="Search" 
-           style={{ width : '200px', height : '50px',  fontSize : '20px'}}
-           value={state.name} //입력되는 값.
-           onChange={handleKeyword4}/>
 
-
-    <button type = "button" class="btn btn-outline-primary my-2 my-sm-0" 
+    <button type = "button" className="btn btn-outline-primary my-2 my-sm-0" 
             style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-            onClick={postAPI}>검색</button>
+            onClick={searchAPI}>검색</button>
   </form>
   </div>
   <br />
@@ -231,7 +222,7 @@ return (
 
  
     );
-  
+      
 }
 
 export default SearchAttribute;
