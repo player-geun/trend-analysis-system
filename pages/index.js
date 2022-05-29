@@ -1,34 +1,65 @@
+
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import Link from 'next/link';
+import Header from '../components/Header'
+import ChartViewButton from '../components/Button/ChartViewButton'
+import KeywordHandleButton from '../components/Button/KeywordHandleButton'
+import KeywordModifyButton from '../components/Button/KeywordModifyButton'
+import KeywordRegStatButton from '../components/Button/KeywordRegStatButton'
+// import 'bootstrap/dist/css/bootstrap.css';
+// import { auto, right } from '@popperjs/core'
 
-
-export default function IndexPage() {
-  
+export default function Home() {
 
   return (
-    <div className="px-4 py-5 my-5 text-center">
-    <div className="col-lg-6 mx-auto">
-      <p className="lead mt-4 mb-4 fw-normal">
-        NextJS와 MongoDB를 이용한 로그인 세션 구현 샘플입니다.
-        <br />
-        계정이 있으시면 아래 로그인 버튼을 누르시고, 
-        <br />
-        없으시면 가입하기 버튼을 눌러 계정을 만드십시요.
-      </p>
-      <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <button type="button" className="btn btn-primary btn px-4 gap-3">
-          
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-secondary btn px-4"
-        >
-          
-        </button>
+    <div className='container'>
+      <h1 style={{fontSize:'60px', fontFamily : 'NanumSquare' }}> 트렌드 분석 시스템 </h1>
+
+      <div className='bt2'>
+        <div className='bt'>
+        <ChartViewButton/>
       </div>
+        <div className='bt'>
+      <KeywordHandleButton/>
+      </div>
+      <div className='bt'>
+      <KeywordModifyButton/>
+        </div>
+        <div className='bt'>
+        <KeywordRegStatButton/>
+        </div>
+        </div>
+
+        
+      
+      <style jsx>{`
+         
+        .container {
+          text-align:center;
+          margin-top:200px;
+          fontFamily : 'NanumSquare';
+
+      
+          
+        }
+        .bt{
+          margin:auto;
+          margin-top:210px;
+          
+        }
+        .bt2{
+          
+          display:flex;
+
+          margin:auto;
+        }
+      `}</style>
+
     </div>
-  </div>
+
+
+  
   )
 }
+    

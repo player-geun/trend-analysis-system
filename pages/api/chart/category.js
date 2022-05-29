@@ -28,8 +28,10 @@ export default async function handler(req, res) {
   const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
 
   const result = {
+    categoryName : categoryName,
     startDate : startDate,
     endDate : endDate,
+    createdAt : keywordModels[0].createdAt.replace('/', '-').replace('/', '-'),
     searchKeywordInfos : absoluteValuesEachDate
   };  
 
