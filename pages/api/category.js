@@ -8,6 +8,9 @@ export default async function handler(req, res) {
     const apiMethod = req.method;
     const reqBody = req.body;
 
+    
+    
+
     if (apiMethod == "POST") {
         const isSuccess = await saveKeywords(reqBody);
 
