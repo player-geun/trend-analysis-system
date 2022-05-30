@@ -7,20 +7,31 @@ dbInit();
 export default async function handler(req, res) {
     const apiMethod = req.method;
     const reqBody = req.body;
-
+    const category = req.body.categoryName
+    
     
     
 
     if (apiMethod == "POST") {
         const isSuccess = await saveKeywords(reqBody);
+        const categoryModels = await findCategory(category);
+        if(categoryModels.length == 0){
+            console.log(req.body.categoryName ,"!!")
+           res.status(200).json({ 
+               isSuccess : false,
+               code: 3001,
+               message: "이미 등록된 카테고리 입니다."
+           })
+        }
 
-        if(isSuccess) {
+        if(isSuccess && categoryModels.length != 0) {
             res.status(200).json({ 
                 isSuccess : true,
                 code: 1000,
                 message: "카테고리 등록에 성공하셨습니다."
-            })
-        } else {
+        })
+          }
+        else {
             res.status(200).json({ 
                 isSuccess : false,
                 code: 4000,
@@ -71,4 +82,9 @@ const saveKeywords = async(reqBody) => {
 
 
     return isSuccess;
+}
+
+const findCategory = async(categoryName) => {
+    const data = await keywordModel.findOne({categoryName : categoryName, active: true});
+    return data;
 }

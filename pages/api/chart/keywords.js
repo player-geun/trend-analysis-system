@@ -14,7 +14,6 @@ export default async function handler(req, res) {
         message : "키워드가 입력되지 않았습니다!",
     });
     process.exit(1);
-    
     }
     let keywords = req.query.words.replace(/ /g, '').split(',');
     const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
