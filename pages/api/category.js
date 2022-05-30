@@ -1,6 +1,7 @@
 // 카테고리 저장 api
 import dbInit from "./dbInit.js";
 import keywordModel from "./models/Keyword.js";
+import React, { useCallback, useEffect, useState } from 'react';
 
 dbInit();
 
@@ -33,6 +34,7 @@ export default async function handler(req, res) {
     }
 }
 
+
 const getTodayDate = () => {
     const today = new Date();
   
@@ -44,6 +46,7 @@ const getTodayDate = () => {
   
     return todayString;
 }
+
 
 const saveKeywords = async(reqBody) => {
     let isSuccess = true;
@@ -61,9 +64,11 @@ const saveKeywords = async(reqBody) => {
     await keywordModel.insertMany(keywordModels)
         .then((docs) => {
             console.log("Inserted!");
+            
         })
         .catch((err) => {
             isSuccess = false;
+
         })
 
 

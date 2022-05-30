@@ -30,6 +30,7 @@ export default async function handler(req, res) {
   const result = {
     startDate : startDate,
     endDate : endDate,
+    createdAt : keywordModels[0].createdAt.replace('/', '-').replace('/', '-'),
     searchKeywordInfos : absoluteValuesEachDate
   };  
 

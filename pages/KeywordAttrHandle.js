@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Graph from '../components/Graph/graph'
 import axios from 'axios';
-import KeywordTable from '../components/Keyword/KeywordTable'
+import KeywordAttrTable from '../components/Keyword/KeywordAttrTable'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 
 
-export default function KeywordHandle() {
+export default function KeywordAttrHandle() {
 
  
 
@@ -43,7 +43,7 @@ export default function KeywordHandle() {
             <br></br> 
 
             <div >
-              <KeywordTable/>
+              <KeywordAttrTable/>
             </div>
 
            

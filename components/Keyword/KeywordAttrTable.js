@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import css from "styled-jsx/css";
 import { useState, useEffect } from 'react';
-import KeywordTable from './KeywordTable';
 import axios from 'axios';
 import Router from 'next/router';
 import DataTable from 'react-data-table-component';
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
-export function RegStat_A(props) {
+export function KeywordAttrTable(props) {
 
   /*구분*/ 
   const [classification,SetClassification] = useState("2");
@@ -15,10 +16,15 @@ export function RegStat_A(props) {
     console.log(e.target.value)
     SetClassification(e.target.value)
     if(e.target.value === "1"){
-      const targetPage = '/KeywordRegStat_K';
+      const targetPage = '/KeywordHandle';
       Router.push(targetPage);
     }
   }
+
+  /*조회일자*/
+    let month = new Date().getMonth();
+    const [startDate,setStartDate] = useState(new Date(new Date().setMonth(month - 1))); //시작 날짜 default : 한 달전
+    const [endDate,setEndDate] = useState(new Date());
 
   /*키워드*/
 
@@ -34,33 +40,7 @@ export function RegStat_A(props) {
 
   const regDataList = new Array();
   var idIdx= 1;
-
-
-
-   
-/*등록 버튼 클릭 api */
-const postAPI = async() => {
-  let url = "http://localhost:3000/api/category";
-  var resultAPI = null;  
-  const result = await axios.post(url,
-      {
-        categoryName: "숫자",
-        keywords: ["1","2"]
-      } 
-    )
-      .then(r => {
-        console.log("SUCCESS");
-        resultAPI = r.data;
-        console.log(resultAPI);
-        res.status(200).json(resultAPI)
-      })
-      .catch((response) => { 
-        // Failure
-        console.log('Error!!')
-      })
-      console.log(result);
-  }
-
+  
 
 
 
@@ -71,40 +51,42 @@ const getAPI = async() => {
 
   const searchData = await axios.get("http://localhost:3000/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+state);
 
-  console.log(searchData);
-
   SetTmp(searchData.data.result.searchKeywordInfos)
   SetRegDate(searchData.data.result.createdAt);
 
+}
+console.log(tmp);
+
+/*등록 버튼 클릭 api */
+const regAPI = async() => {
+  window.open("http://localhost:3000/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
 
 }
 
-console.log(tmp);
+/*삭제 버튼 클릭 api */
+const deleteAPI = async() => {
+
+}
+
+
 
 
 
 /*키워드 테이블*/
 const columns = [
   {
-      name: '키워드 속성',
-      selector: row => row.keywordAttr,
+      name: '키워드',
+      selector: row => row.keyword,
   },
   {
       name: '검색량',
       selector: row => row.keywordVolume,
   },
   {
-     name: '키워드',
-     selector: row => row.keyword,
-  },
-  {
       name: '등록일자',
       selector: row => row.regDate,
   },
-  {
-      name: '삭제',
-      selector: row => row.isDelete,
-  },
+
 ];
 
 
@@ -114,22 +96,20 @@ console.log(tmp);
 
 
 if(tmp.length>0){
-  idIdx = idIdx+1;
+
   let attrList = ''
   for (var i = 0; i <tmp.length; i++) {
-      attrList += ( "#"+tmp[i].keyword + " " )
+      regDataList.push(    
+        {
+        id: idIdx,
+        keyword: tmp[i].keyword,
+        keywordVolume: '?',
+        regDate: regDate,
+    
+    })
+    idIdx = idIdx+1;
    }
-  
-  
-  regDataList.push(    
-    {
-    id: idIdx,
-    keywordAttr: attrList,
-    keywordVolume: '?',
-    keyword: state,
-    regDate: regDate,
-    isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
-})
+
 
 
   
@@ -137,7 +117,7 @@ if(tmp.length>0){
     <div style={{ fontFamily : 'NanumSquare' }}>
     
     <div className = "mx-3">
-          <a className = "mx-0"> 조회 구분 </a>
+          <a className = "mx-0"> 구분 </a>
           <input className = "mx-3"
             type = "radio"
             value = "1"
@@ -157,6 +137,77 @@ if(tmp.length>0){
             2. 키워드 속성
           </label>
       </div>
+
+      <div className = "mx-3">
+  <a> 조회일자  </a>
+      <div className = "container">
+ 
+      <DatePicker
+        dateFormat = "yyyy/MM/dd"
+        selected = {startDate}
+        onChange = {date => setStartDate(date)}
+        selectsStart
+        startDate = {startDate}
+        endDate = {endDate} />
+        
+        <style jsx>{`
+        .container {
+          position : relative;
+          top : -38px;
+          left : 70px;
+          display : block;
+          margin: 0.5rem;
+          font-size : 18px;
+
+        }
+      
+        `}</style>
+
+        </div>
+
+        <div className = "container">
+          <a>~</a>
+          <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 125px;
+          left : 325px;
+          margin: 0.5rem;
+          font-size : 30px;
+        }
+        `}</style>
+        </div>
+    
+
+  <div className = "container">
+
+      <DatePicker 
+        dateFormat = "yyyy/MM/dd"
+        selected = {endDate}
+        onChange = {date => setEndDate(date)}
+        selectsEnd
+        endDate = {endDate}
+        minDate = {startDate} />
+        
+
+        <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 130px;
+          left : 350px;
+          margin: 0.5rem;
+          font-size : 19px;
+
+        }
+      
+        `}</style>
+
+
+      </div>
+  </div>
+  <br />
     
       <div className = "mx-3"> 
       <form className="form-inline" >
@@ -173,7 +224,10 @@ if(tmp.length>0){
                 onClick = {getAPI} > 조회 </button>
             <button type = "button" className="btn btn-outline-primary mx-2" 
                 style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-                onClick = {postAPI} > 등록 </button>
+                onClick = {regAPI} > 등록 </button>
+            <button type = "button" className="btn btn-outline-primary mx-2" 
+                style={{ width : '100px', height : '50px',  fontSize : '20px' }}
+                onClick = {deleteAPI} > 삭제 </button>
     </div>
     
       
@@ -204,7 +258,7 @@ else{
     <div style={{ fontFamily : 'NanumSquare' }}>
     
     <div className = "mx-3">
-          <a className = "mx-0"> 조회 구분 </a>
+          <a className = "mx-0"> 구분 </a>
           <input className = "mx-3"
             type = "radio"
             value = "1"
@@ -224,11 +278,82 @@ else{
             2. 키워드 속성
           </label>
       </div>
+
+      <div className = "mx-3">
+  <a> 조회일자  </a>
+      <div className = "container">
+ 
+      <DatePicker
+        dateFormat = "yyyy/MM/dd"
+        selected = {startDate}
+        onChange = {date => setStartDate(date)}
+        selectsStart
+        startDate = {startDate}
+        endDate = {endDate} />
+        
+        <style jsx>{`
+        .container {
+          position : relative;
+          top : -38px;
+          left : 70px;
+          display : block;
+          margin: 0.5rem;
+          font-size : 18px;
+
+        }
+      
+        `}</style>
+
+        </div>
+
+        <div className = "container">
+          <a>~</a>
+          <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 125px;
+          left : 325px;
+          margin: 0.5rem;
+          font-size : 30px;
+        }
+        `}</style>
+        </div>
+    
+
+  <div className = "container">
+
+      <DatePicker 
+        dateFormat = "yyyy/MM/dd"
+        selected = {endDate}
+        onChange = {date => setEndDate(date)}
+        selectsEnd
+        endDate = {endDate}
+        minDate = {startDate} />
+        
+
+        <style jsx>{`
+        .container {
+          display : block;
+          position : absolute;
+          top : 130px;
+          left : 350px;
+          margin: 0.5rem;
+          font-size : 19px;
+
+        }
+      
+        `}</style>
+
+
+      </div>
+  </div>
+  <br />
     
       <div className = "mx-3"> 
       <form className="form-inline" >
         <a className = "mx-1"> 조회키</a>
-        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력"  aria-label="Search" 
                style={{ width : '200px', height : '50px',  fontSize : '20px'}}
                value={state.name} //입력되는 값.
                onChange={handleKeyword}/>
@@ -240,8 +365,10 @@ else{
                 onClick = {getAPI} > 조회 </button>
             <button type = "button" className="btn btn-outline-primary mx-2" 
                 style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-                onClick = {postAPI} > 등록 </button>
-
+                onClick = {regAPI} > 등록 </button>
+             <button type = "button" className="btn btn-outline-primary mx-2" 
+                style={{ width : '100px', height : '50px',  fontSize : '20px' }}
+                onClick = {deleteAPI} > 삭제 </button>
     </div>
     
       
@@ -262,4 +389,4 @@ else{
   
 }
 
-export default RegStat_A;
+export default KeywordAttrTable;
