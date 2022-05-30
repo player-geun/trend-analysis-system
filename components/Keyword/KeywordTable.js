@@ -295,8 +295,7 @@ if(viewDataList.length>0){
       <br />
       
       <DataTable 
-                columns={columns}
-                
+                columns={columns}          
                 data={regDataList}
                 selectableRows
                 />

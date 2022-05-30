@@ -60,7 +60,7 @@ console.log(tmp);
 /*등록 버튼 클릭 api */
 const regAPI = async() => {
   window.open("http://localhost:3000/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
-
+  
 }
 
 /*삭제 버튼 클릭 api */
@@ -75,17 +75,32 @@ const deleteAPI = async() => {
 /*키워드 테이블*/
 const columns = [
   {
-      name: '키워드',
+      name: <h6><strong>키워드</strong></h6>,
       selector: row => row.keyword,
+      sortable: true,
+      style : {fontSize : 15}
+      
+      
   },
   {
-      name: '검색량',
+      name: <h6><strong>검색량</strong></h6>,
       selector: row => row.keywordVolume,
+      sortable: true,
+      style : {fontSize : 15}
+
   },
   {
-      name: '등록일자',
+      name: <h6><strong>등록일자</strong></h6>,
       selector: row => row.regDate,
+      sortable: true,
+      style : {fontSize : 15}
   },
+    {
+      name: <h6><strong>삭제</strong></h6>,
+      selector: row => row.isDelete,
+
+  },
+  
 
 ];
 
@@ -105,6 +120,7 @@ if(tmp.length>0){
         keyword: tmp[i].keyword,
         keywordVolume: '?',
         regDate: regDate,
+        isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
     
     })
     idIdx = idIdx+1;
@@ -235,10 +251,12 @@ if(tmp.length>0){
       <br />
       
       <DataTable 
+      
                 columns={columns}
-                
                 data={regDataList}
-                selectableRows
+                selectableRows   
+                dense = 'true'
+                
                 />
     
       </div>

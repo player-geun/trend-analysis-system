@@ -96,10 +96,7 @@ const columns = [
       name: '등록일자',
       selector: row => row.regDate,
   },
-  {
-      name: '삭제',
-      selector: row => row.isDelete,
-  },
+
 ];
 
 
@@ -123,7 +120,6 @@ if(tmp.length>0){
     keywordVolume: '?',
     keywordAttr: attrList,
     regDate: tmp[0].keywordAmountArray[0].period,
-    isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
 })
 
 
@@ -180,6 +176,7 @@ if(tmp.length>0){
                 
                 data={regDataList}
                 selectableRows
+                dense = 'true'
                 />
     
       </div>

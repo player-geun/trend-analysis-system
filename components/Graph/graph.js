@@ -11,6 +11,8 @@ export default function Graph(props) {
     const Container = styled.div`
         width: 200vw;
         max-width: 1100px;
+
+        
     `;
 
     const options = {
@@ -28,16 +30,18 @@ export default function Graph(props) {
               font: {
                 family: "'NanumSquare', 'serif'",
                 lineHeight: 1,
+                size : 14,
               },
             }
           },
           tooltip: {
             backgroundColor: 'rgba(124, 35, 35, 0.4)',
-            padding: 10,
+            padding: 20,
             bodySpacing: 5,
             bodyFont: {
               font: {
                 family: "'NanumSquare', sans-serif",
+                
               }
             },
             usePointStyle: true,
@@ -51,9 +55,11 @@ export default function Graph(props) {
                     label += ': ';
                 }
                 if (context.parsed.y !== null) {
-                    label += context.parsed.y;
+                    label += Math.ceil(context.parsed.y);
                 }
+                
                 return label;
+                
               },
             },
           },
@@ -105,7 +111,7 @@ export default function Graph(props) {
                 family: "'NanumSquare', sans-serif",
                 weight: 400,
               },
-              text: '단위: 배'
+              text: '단위: 회'
             }
           }
         }

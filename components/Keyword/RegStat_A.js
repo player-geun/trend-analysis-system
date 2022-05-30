@@ -81,30 +81,36 @@ const getAPI = async() => {
 
 console.log(tmp);
 
+/*등록 버튼 클릭 api */
+const regAPI = async() => {
+  window.open("http://localhost:3000/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
+  
+}
 
 
 /*키워드 테이블*/
 const columns = [
   {
-      name: '키워드 속성',
+      name: <h6><strong>#키워드 속성</strong></h6>,
       selector: row => row.keywordAttr,
+      style : {fontSize : 15}
   },
   {
-      name: '검색량',
+     name: <h6><strong>검색량</strong></h6>,
       selector: row => row.keywordVolume,
+      style : {fontSize : 15}
   },
   {
-     name: '키워드',
+     name: <h6><strong>키워드</strong></h6>,
      selector: row => row.keyword,
+     style : {fontSize : 15}
   },
   {
-      name: '등록일자',
+     name: <h6><strong>등록일자</strong></h6>,
       selector: row => row.regDate,
+      style : {fontSize : 15}
   },
-  {
-      name: '삭제',
-      selector: row => row.isDelete,
-  },
+
 ];
 
 
@@ -128,7 +134,7 @@ if(tmp.length>0){
     keywordVolume: '?',
     keyword: state,
     regDate: regDate,
-    isDelete : <button type="button" className="btn btn-outline-secondary" style = {{width : "80px", height : "35px"}}>삭제</button>
+
 })
 
 
@@ -161,7 +167,7 @@ if(tmp.length>0){
       <div className = "mx-3"> 
       <form className="form-inline" >
         <a className = "mx-1"> 조회키</a>
-        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성 입력" aria-label="Search" 
                style={{ width : '200px', height : '50px',  fontSize : '20px'}}
                value={state.name} //입력되는 값.
                onChange={handleKeyword}/>
@@ -228,7 +234,7 @@ else{
       <div className = "mx-3"> 
       <form className="form-inline" >
         <a className = "mx-1"> 조회키</a>
-        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드 속성 입력" aria-label="Search" 
+        <input className="form-control mr-sm-2 mx-3" type="search" placeholder="#키워드 속성 입력" aria-label="Search" 
                style={{ width : '200px', height : '50px',  fontSize : '20px'}}
                value={state.name} //입력되는 값.
                onChange={handleKeyword}/>
@@ -240,7 +246,7 @@ else{
                 onClick = {getAPI} > 조회 </button>
             <button type = "button" className="btn btn-outline-primary mx-2" 
                 style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-                onClick = {postAPI} > 등록 </button>
+                onClick = {regAPI} > 등록 </button>
 
     </div>
     
