@@ -6,10 +6,20 @@ import keywordModel from "../models/Keyword.js";
 dbInit();
 
 export default async function handler(req, res) {
+  if(req.query.categoryName == null){
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2003,
+      message : "카테고리가 입력되지 않았습니다!",
+  });
+  }
   const categoryName = req.query.categoryName;
   const keywords = [];
   const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
   const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
+
+  const startDateTest = req.query.startDate.split('/');
+  const endDateTest = req.query.endDate.split('/');
 
   const keywordModels = await findCategory(categoryName);
   if(keywordModels.length == 0) {
@@ -24,10 +34,37 @@ export default async function handler(req, res) {
     });
   }
 
+  // 날짜 잘못 입력했을때
+  if(startDateTest[0] > endDateTest[0]){
+
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+  if(startDateTest[0] === endDateTest[0] && startDateTest[1]>endDateTest[1]){
+
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+  if(startDateTest[1] == endDateTest[1] && startDateTest[2] > endDateTest[2]){
+
+    return res.status(200).json({
+      isSuccess : false,
+      code : 2002,
+      message : "시작일 보다 마지막일이 더 먼저입니다.",
+    });
+  }
+
   const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
   const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
 
   const result = {
+    categoryName : categoryName,
     startDate : startDate,
     endDate : endDate,
     createdAt : keywordModels[0].createdAt.replace('/', '-').replace('/', '-'),

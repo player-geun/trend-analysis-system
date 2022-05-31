@@ -4,72 +4,86 @@ import axios from 'axios';
 
 
 export default async function handler(req, res) {
-  let keywords = req.query.words.replace(/ /g, '').split(',');
-  const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
-  const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
-
-
-  const startDateTest = req.query.startDate.split('/');
-  const endDateTest = req.query.endDate.split('/');
-  
-  //키워드 5개 이상 입력했을 때 오류
-
-  if (keywords.length > 5) {
-    return res.status(200).json({
+    
+    // 키워드를 입력하지 않았을 때 예외처리!
+    if(req.query.words == null){
+      
+      return res.status(200).json({
         isSuccess : false,
-        code : 2001,
-        message : "키워드 갯수가 5개를 초과했습니다.",
+        code : 2003,
+        message : "키워드가 입력되지 않았습니다!",
     });
-  }
-  // 날짜 잘못 입력했을때
-  if(startDateTest[0] > endDateTest[0]){
-    console.log("4")
-    return res.status(200).json({
-      isSuccess : false,
-      code : 2002,
-      message : "시작일 보다 마지막일이 더 먼저입니다.",
-    });
-  }
-  if(startDateTest[0] === endDateTest[0] && startDateTest[1]>endDateTest[1]){
-    console.log("2")
-    return res.status(200).json({
-      isSuccess : false,
-      code : 2002,
-      message : "시작일 보다 마지막일이 더 먼저입니다.",
-    });
-  }
-  if(startDateTest[1] == endDateTest[1] && startDateTest[2] > endDateTest[2]){
-    console.log("3")
-    return res.status(200).json({
-      isSuccess : false,
-      code : 2002,
-      message : "시작일 보다 마지막일이 더 먼저입니다.",
-    });
-  }
-
-
-
-  const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
-  const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
-
-
+    process.exit(1);
+    }
+    let keywords = req.query.words.replace(/ /g, '').split(',');
+    const startDate = req.query.startDate.replace('/', '-').replace('/', '-');
+    const endDate = req.query.endDate.replace('/', '-').replace('/', '-');
   
-  const result = {
-    startDate : startDate,
-    endDate : endDate,
-    searchKeywordInfos : absoluteValuesEachDate
-  };  
+  
+    const startDateTest = req.query.startDate.split('/');
+    const endDateTest = req.query.endDate.split('/');
+    
+    //키워드 5개 이상 입력했을 때 오류
+  
 
+    if (keywords.length > 5) {
+      return res.status(200).json({
+          isSuccess : false,
+          code : 2001,
+          message : "키워드 갯수가 5개를 초과했습니다.",
+      });
+    }
+    // 날짜 잘못 입력했을때
+    if(startDateTest[0] > endDateTest[0]){
 
+      return res.status(200).json({
+        isSuccess : false,
+        code : 2002,
+        message : "시작일 보다 마지막일이 더 먼저입니다.",
+      });
+    }
+    if(startDateTest[0] === endDateTest[0] && startDateTest[1]>endDateTest[1]){
+  
+      return res.status(200).json({
+        isSuccess : false,
+        code : 2002,
+        message : "시작일 보다 마지막일이 더 먼저입니다.",
+      });
+    }
+    if(startDateTest[1] == endDateTest[1] && startDateTest[2] > endDateTest[2]){
 
-  return res.status(200).json({
-      isSuccess : true,
-      code : 1000,
-      message : "성공",
-      result : result
-  });
-
-
+      return res.status(200).json({
+        isSuccess : false,
+        code : 2002,
+        message : "시작일 보다 마지막일이 더 먼저입니다.",
+      });
+    }
+    
+  
+  
+   
+   
+  
+    const [absoluteValuePerOneRatio, trendAnalysisData, changedKeywords] = await getAbsolutesPerOneRatio(startDate, endDate, keywords);
+    const absoluteValuesEachDate = await getAbsoluteValuesEachDate(startDate, endDate, changedKeywords, trendAnalysisData, absoluteValuePerOneRatio);
+  
+  
+    
+    const result = {
+      startDate : startDate,
+      endDate : endDate,
+      searchKeywordInfos : absoluteValuesEachDate
+    };  
+  
+  
+  
+    return res.status(200).json({
+        isSuccess : true,
+        code : 1000,
+        message : "성공",
+        result : result
+    });
+  
 }
 
 // 1ratio당 검색량을 구하는 부분
@@ -226,10 +240,11 @@ const getDiffBetweenTwoDates = (_date1, _date2) => {
 
 
 /*
-
-- 한달 절댓값과 상댓값을 구하기
-- 상댓값 1에 절댓값 구하기
-- 트렌드 분석 API 원하는 기간으로 다시 호출
-- 각 날짜의 ratio에 상댓값 1당 구한 절댓값 곱해서 각 날짜의 검색량 구하기
-
+예시 1월 15일 부터 2월 15일까지를 조회하려는데 오늘은 5월 15일일때
+1. 트렌드 분석 api로 1월 15일 부터 5월 15일까지 값 얻어옴
+2. 광고 검색 api로 최근 한달 (4/15 - 5/15) 검색량 얻어옴
+3. 1에서 얻어온 값으로 최근 한달 총 ratio 값 구함
+4. 1ratio당 검색량 구하기
+5. 조회하는 날짜간의 차이를 구한다
+6. 1에서 구해놓은 값을 처음 인덱스 부터 5에서 구한 숫자만큼 순회하며 4에서 구한것을 곱해주며 절댓값 획득
 */
