@@ -59,19 +59,8 @@ console.log(tmp);
 
 
 /*'전체' 조회 버튼 클릭 api */
-const [allData,SetAllData] = useState([]);
-const [allDataClick,SetAllDataClick] = useState('0');
-const getAllAPI = async() => {
-  SetTmp([]);
-  SetAllDataClick('1');
-  console.log("here"+allDataClick);
-  const searchAllData = await axios.get("http://localhost:3000/api/all-data");
-  //console.log(searchAllData.data.result.allKeywords);
-  SetAllData(searchAllData.data.result.allKeywords)
-
-  //console.log(searchAllData)
- // console.log(allData);
-  //console.log(searchAllData.data.result.allKeywords.length);
+const getAllAPI  = async() => {
+  window.open("http://localhost:3000/KeywordAttrAll", "a", "width=1000, height=500, left=100, top=50");
 }
 
 

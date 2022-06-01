@@ -75,7 +75,7 @@ const [endDate,setEndDate] = useState(new Date());
         return resArr;
       }
   
-
+    
 /*검색 버튼 클릭 api */
     const searchAPI = async() => {
 
@@ -88,18 +88,38 @@ const [endDate,setEndDate] = useState(new Date());
       let finalEndDate = selectedEndDate[0]+"/"+selectedEndDate[1]+"/"+selectedEndDate[2];
 
       let url = "/api/chart/keywords?"+"startDate="+finalStartDate+"&endDate="+finalEndDate+"&words="+words;
+      var resultAPI = null;
 
-      console.log("url:"+ url)
+      const searchData = await axios.get(url) //api 호출 데이터
+      .then(r => {
+        resultAPI = r.data;
+        console.log(resultAPI);
+        res.status(200).json(resultAPI)
+      })
+      .catch((response) => { 
+        // Failure
 
-      const searchData = await axios.get(url); //api 호출 데이터
+
+        if(resultAPI === null){
+          alert("키워드를 입력하세요.");
+        }else if(resultAPI.message === "성공"){
+          //alert();
+        }else{
+          alert(resultAPI.message);
+        }
+        
+        
+
+      })
       
+
       //인덱스 할당
       var idxArr = new Array(); 
       var searchDataList = new Array();
       var chartDataList = new Array();
       for (var i = 0; i < finalStateArr.length; i++) {
-        idxArr[i] = searchData.data.result.searchKeywordInfos.findIndex(x => x.keyword === stateArr[i]);
-        searchDataList[i] = searchData.data.result.searchKeywordInfos[idxArr[i]].keywordAmountArray;
+        idxArr[i] = resultAPI.result.searchKeywordInfos.findIndex(x => x.keyword === stateArr[i]);
+        searchDataList[i] = resultAPI.result.searchKeywordInfos[idxArr[i]].keywordAmountArray;
         chartDataList[i] = getConvertToXY(searchDataList[i]);
       }
 

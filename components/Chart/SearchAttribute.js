@@ -65,11 +65,30 @@ const searchAPI = async() => {
   let finalEndDate = selectedEndDate[0]+"/"+selectedEndDate[1]+"/"+selectedEndDate[2];
   let url = "http://localhost:3000/api/chart/category?startDate="+finalStartDate+"&endDate="+finalEndDate+"&categoryName="+state1;
 
-  console.log("url:"+ url)
+ 
+  var resultAPI = null;
+  const searchData = await axios.get(url) //api 호출 데이터
+  .then(r => {
+    resultAPI = r.data;
+    console.log(resultAPI);
+    res.status(200).json(resultAPI)
+  })
+  .catch((response) => { 
+    // Failure
 
-  const searchData = await axios.get(url); //api 호출 데이터
-  console.log(searchData);
 
+    if(resultAPI === null){
+      alert("시작일 보다 마지막일이 더 먼저입니다.");
+    }else if(resultAPI.message === "성공"){
+      //alert();
+    }else{
+      alert(resultAPI.message);
+  
+    }
+    
+
+  })
+  
 
  var searchDataList = new Array();
  var chartDataList = new Array();
@@ -77,26 +96,29 @@ const searchAPI = async() => {
 
 
 var FinalChartDataList = new Array();
-for (var i = 0; i < searchData.data.result.searchKeywordInfos.length; i++) {
+if(resultAPI != null && resultAPI.isSuccess === true){
+  for (var i = 0; i < resultAPI.result.searchKeywordInfos.length; i++) {
 
-  chartDataList[i] = getConvertToXY(searchData.data.result.searchKeywordInfos[i].keywordAmountArray);
-
-  FinalChartDataList[i]= {
-   type: 'line',
-   label: searchData.data.result.searchKeywordInfos[i].keyword, 
-   borderColor: ColorList[i],
-   borderWidth: 2,
-   data: chartDataList[i]
- }
-}
-
- setGraphData(
-   {
-     datasets: FinalChartDataList
+    chartDataList[i] = getConvertToXY(resultAPI.result.searchKeywordInfos[i].keywordAmountArray);
+  
+    FinalChartDataList[i]= {
+     type: 'line',
+     label: resultAPI.result.searchKeywordInfos[i].keyword, 
+     borderColor: ColorList[i],
+     borderWidth: 2,
+     data: chartDataList[i]
    }
- );
-
+  }
+  
+   setGraphData(
+     {
+       datasets: FinalChartDataList
+     }
+   );
+  
+  }
 }
+
 
 
 return (
