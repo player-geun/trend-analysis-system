@@ -111,7 +111,6 @@ console.log(tmp);
 
 
 if(tmp.length>0){
-
   let attrList = ''
   for (var i = 0; i <tmp.length; i++) {
       regDataList.push(    

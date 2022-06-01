@@ -29,37 +29,18 @@ export function RegStat_K(props) {
     SetState(e.target.value)
   }
 
-
   /* 등록 테이블 - 데이터*/
 
   const regDataList = new Array();
   var idIdx= 1;
 
 
-/*등록 버튼 클릭 api */
-const postAPI = async() => {
-  let url = "http://localhost:3000/api/category";
-  var resultAPI = null;  
-  const result = await axios.post(url,
-      {
-        categoryName: "숫자",
-        keywords: ["1","2"]
-      } 
-    )
-      .then(r => {
-        console.log("SUCCESS");
-        resultAPI = r.data;
-        console.log(resultAPI);
-        res.status(200).json(resultAPI)
-      })
-      .catch((response) => { 
-        // Failure
-        console.log('Error!!')
-      })
-      console.log(result);
-  }
 
-
+  /*등록 버튼 클릭 api */
+const regAPI = async() => {
+  window.open("http://localhost:3000/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
+  
+}
 
 
 /*조회 버튼 클릭 api */
@@ -76,6 +57,22 @@ const getAPI = async() => {
 }
 console.log(tmp);
 
+
+/*'전체' 조회 버튼 클릭 api */
+const [allData,SetAllData] = useState([]);
+const [allDataClick,SetAllDataClick] = useState('0');
+const getAllAPI = async() => {
+  SetTmp([]);
+  SetAllDataClick('1');
+  console.log("here"+allDataClick);
+  const searchAllData = await axios.get("http://localhost:3000/api/all-data");
+  //console.log(searchAllData.data.result.allKeywords);
+  SetAllData(searchAllData.data.result.allKeywords)
+
+  //console.log(searchAllData)
+ // console.log(allData);
+  //console.log(searchAllData.data.result.allKeywords.length);
+}
 
 
 /*키워드 테이블*/
@@ -164,7 +161,10 @@ if(tmp.length>0){
                 onClick = {getAPI} > 조회 </button>
             <button type = "button" className="btn btn-outline-primary mx-2" 
                 style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-                onClick = {postAPI} > 등록 </button>
+                onClick = {regAPI} > 등록 </button>
+            <button type = "button" className="btn btn-outline-primary mx-2" 
+                style={{ width : '100px', height : '50px',  fontSize : '20px' }}
+                onClick = {getAllAPI}> 전체조회 </button> 
     </div>
     
       
@@ -232,7 +232,10 @@ else{
                 onClick = {getAPI} > 조회 </button>
             <button type = "button" className="btn btn-outline-primary mx-2" 
                 style={{ width : '100px', height : '50px',  fontSize : '20px' }}
-                onClick = {postAPI} > 등록 </button>
+                onClick = {regAPI} > 등록 </button>
+            <button type = "button" className="btn btn-outline-primary mx-2" 
+                style={{ width : '100px', height : '50px',  fontSize : '20px' }}
+                onClick = {getAllAPI}> 전체조회 </button> 
     </div>
     
       

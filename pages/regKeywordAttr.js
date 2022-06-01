@@ -11,7 +11,9 @@ const [currentCategoryName,setCurrentCategoryName]  = useState('');
 const [currentKeyword1,setCurrentKeyword1] = useState('');
 const [currentKeyword2,setCurrentKeyword2] = useState('');
 const [currentKeyword3,setCurrentKeyword3] = useState('');
-const keywordArr = [currentKeyword1,currentKeyword2,currentKeyword3];
+const [currentKeyword4,setCurrentKeyword4] = useState('');
+const [currentKeyword5,setCurrentKeyword5] = useState('');
+const keywordArr = [currentKeyword1,currentKeyword2,currentKeyword3,currentKeyword4,currentKeyword5];
 
 const handleCategoryName = (e) => {
     console.log(e.target.value)
@@ -29,6 +31,14 @@ const handleCategoryName = (e) => {
   const handleKeyword3 = (e) => {
     console.log(e.target.value)
     setCurrentKeyword3(e.target.value)
+  }
+  const handleKeyword4 = (e) => {
+    console.log(e.target.value)
+    setCurrentKeyword4(e.target.value)
+  }
+  const handleKeyword5 = (e) => {
+    console.log(e.target.value)
+    setCurrentKeyword5(e.target.value)
   }
 
 
@@ -77,24 +87,38 @@ const regAPI = async() => {
             
  
             
-            <div className ="box">
+          <div className ="box">
             <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드1 입력"  aria-label="Search" 
                 style={{ width : '200px', height : '70px',  fontSize : '20px'}}
                 value={currentKeyword1.name} //입력되는 값.
                 onChange={handleKeyword1}/>
-                </div>
+          </div>
          <div className ="box">
              <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드2 입력"  aria-label="Search" 
                 style={{ width : '200px', height : '70px',  fontSize : '20px'}}
                 value={currentKeyword2.name} //입력되는 값.
                 onChange={handleKeyword2}/>
-            </div>
+          </div>
 
         <div className ="box">
             <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드3 입력"  aria-label="Search" 
                 style={{ width : '200px', height : '70px',  fontSize : '20px'}}
                 value={currentKeyword3.name} //입력되는 값.
                 onChange={handleKeyword3}/>
+        </div>
+
+        <div className ="box">
+            <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드4 입력"  aria-label="Search" 
+                style={{ width : '200px', height : '70px',  fontSize : '20px'}}
+                value={currentKeyword4.name} //입력되는 값.
+                onChange={handleKeyword4}/>
+        </div>
+
+        <div className ="box">
+            <input className="form-control mr-sm-2 mx-3" type="search" placeholder="키워드5 입력"  aria-label="Search" 
+                style={{ width : '200px', height : '70px',  fontSize : '20px'}}
+                value={currentKeyword5.name} //입력되는 값.
+                onChange={handleKeyword5}/>
         </div>
 
         <div className ="box">
@@ -112,7 +136,6 @@ const regAPI = async() => {
      display : block;
      margin: 1rem;
      font-size : 18px;
-
    }
  
    `}</style>
@@ -125,7 +148,6 @@ const regAPI = async() => {
      display : inline-block;
      margin: 1rem;
      font-size : 18px;
-
    }
  
    `}</style>
@@ -140,3 +162,4 @@ const regAPI = async() => {
         
     );
 };
+
