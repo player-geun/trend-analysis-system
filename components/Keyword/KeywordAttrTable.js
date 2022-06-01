@@ -50,7 +50,7 @@ const [regDate,SetRegDate] = useState('');
 const getAPI = async() => {
 
   const searchData = await axios.get("http://localhost:3000/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+state);
-
+  console.log(searchData);
   SetTmp(searchData.data.result.searchKeywordInfos)
   SetRegDate(searchData.data.result.createdAt);
 
