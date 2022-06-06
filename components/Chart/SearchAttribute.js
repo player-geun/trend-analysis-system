@@ -63,7 +63,7 @@ const searchAPI = async() => {
   let selectedEndDate = [endDate.getFullYear(),(endDate.getMonth()+1) < 10 ? "0" + (endDate.getMonth()+1) : (endDate.getMonth()+1), (endDate.getDate()) < 10 ? "0" + (endDate.getDate()) : (endDate.getDate())];
   let finalStartDate = selectedStartDate[0]+"/"+selectedStartDate[1]+"/"+selectedStartDate[2];
   let finalEndDate = selectedEndDate[0]+"/"+selectedEndDate[1]+"/"+selectedEndDate[2];
-  let url = "http://localhost:3000/api/chart/category?startDate="+finalStartDate+"&endDate="+finalEndDate+"&categoryName="+state1;
+  let url = "/api/chart/category?startDate="+finalStartDate+"&endDate="+finalEndDate+"&categoryName="+state1;
 
  
   var resultAPI = null;
