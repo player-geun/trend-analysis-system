@@ -39,7 +39,7 @@ export function RegStat_A(props) {
 
   /*등록 버튼 클릭 api */
 const regAPI = async() => {
-  window.open("http://localhost:3000/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
+  window.open("/regKeywordAttr", "a", "width=1000, height=400, left=100, top=50");
   
 }
 
@@ -50,7 +50,7 @@ const [tmp,SetTmp] = useState([]);
 const [regDate,SetRegDate] = useState('');
 const getAPI = async() => {
 
-  const searchData = await axios.get("http://localhost:3000/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+state);
+  const searchData = await axios.get("/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+state);
 
   console.log(searchData);
 
@@ -63,7 +63,7 @@ const getAPI = async() => {
 
 /*'전체' 조회 버튼 클릭 api */
  const getAllAPI  = async() => {
-  window.open("http://localhost:3000/KeywordAttrAll", "a", "width=1000, height=500, left=100, top=50");
+  window.open("/KeywordAttrAll", "a", "width=1000, height=500, left=100, top=50");
 }
 
 

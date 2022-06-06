@@ -47,7 +47,7 @@ const handleCategoryName = (e) => {
 
 const regAPI = async() => {
     const finalKeywords = keywordArr.filter((x) => x !== '');
-    let url = "http://localhost:3000/api/category";
+    let url = "/api/category";
     var resultAPI = null;  
     const result = await axios.post(url,
         {

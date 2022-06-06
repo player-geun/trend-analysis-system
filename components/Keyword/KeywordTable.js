@@ -64,7 +64,7 @@ export function KeywordTable(props) {
 
 /*등록 버튼 클릭 api */
 const postAPI = async() => {
-  let url = "http://localhost:3000/api/category";
+  let url = "/api/category";
   var resultAPI = null;  
   const result = await axios.post(url,
       {
@@ -95,7 +95,7 @@ const getAPI = async() => {
       setFinalKeywordArr(keywordArr.filter((x) => x !== ''));
 
         for (var i = 0; i < finalKeywordArr.length; i++) {
-            const searchData = await axios.get("http://localhost:3000/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+finalKeywordArr[i]);
+            const searchData = await axios.get("/api/chart/category?startDate=2022/03/01&endDate=2022/05/28&categoryName="+finalKeywordArr[i]);
             //viewDataList.push(searchData.data.result.searchKeywordInfos);
             setViewDataList(viewDataList.concat([searchData.data.result.searchKeywordInfos]));
 

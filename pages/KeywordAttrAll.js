@@ -16,7 +16,7 @@ export default function KeywordAttrAll() {
     const getAllAPI = async() => {
       SetAllDataClick('1');
       console.log("here"+allDataClick);
-      const searchAllData = await axios.get("http://localhost:3000/api/all-data");
+      const searchAllData = await axios.get("/api/all-data");
       //console.log(searchAllData.data.result.allKeywords);
       SetAllData(searchAllData.data.result.allKeywords)
     
