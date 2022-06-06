@@ -5,7 +5,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
-export default function regKeywordAttr() {
+export default function RegKeywordAttr() {
 
 const [currentCategoryName,setCurrentCategoryName]  = useState('');
 const [currentKeyword1,setCurrentKeyword1] = useState('');
