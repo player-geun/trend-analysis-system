@@ -12,17 +12,17 @@ public class KeywordController {
 
     }
 
-    @PostMapping("/new")
+    @PostMapping("/")
     public void create() {
 
     }
 
-    @PutMapping("/{keywordId}/update")
+    @PutMapping("/{keywordId}")
     public void updateKeyword() {
 
     }
 
-    @DeleteMapping("/{keyword}/delete")
+    @DeleteMapping("/{keyword}")
     public void deleteKeyword() {
 
     }
