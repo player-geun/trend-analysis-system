@@ -4,6 +4,8 @@ import com.trendanalysis.dto.KeywordRequestDto;
 import com.trendanalysis.domain.Category;
 import com.trendanalysis.domain.Keyword;
 import com.trendanalysis.service.KeywordService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class KeywordController {
     }
 
     @PostMapping("/")
-    public void create(@RequestBody KeywordRequestDto keywordRequestDto) {
+    public Id create(@RequestBody KeywordRequestDto keywordRequestDto) {
         List<Category> list = new ArrayList<>();
 
         Keyword keyword = Keyword.builder()
@@ -31,7 +33,9 @@ public class KeywordController {
                 .categories(list)
                 .build();
 
-        keywordService.save(keyword, keywordRequestDto.getCategoryNames());
+        Keyword save = keywordService.save(keyword, keywordRequestDto.getCategoryNames());
+
+        return new Id(save.getId().toString());
     }
 
     @PutMapping("/{keywordId}")
@@ -42,5 +46,11 @@ public class KeywordController {
     @DeleteMapping("/{keyword}")
     public void deleteKeyword() {
 
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class Id {
+        private String id;
     }
 }

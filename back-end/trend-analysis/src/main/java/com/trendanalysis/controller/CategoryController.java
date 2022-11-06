@@ -6,6 +6,8 @@ import com.trendanalysis.dto.ChildResponseDto;
 import com.trendanalysis.domain.Category;
 import com.trendanalysis.domain.Keyword;
 import com.trendanalysis.service.CategoryService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +54,7 @@ public class CategoryController {
     }
 
     @PostMapping("/")
-    public void create(@RequestBody CategoryRequestDto categoryRequestDto) {
+    public Id create(@RequestBody CategoryRequestDto categoryRequestDto) {
         List<Keyword> list = new ArrayList<>();
 
         Category category = Category.builder()
@@ -61,7 +63,9 @@ public class CategoryController {
                 .keywords(list)
                 .build();
 
-        categoryService.save(category);
+        Category save = categoryService.save(category);
+
+        return new Id(save.getId().toString());
     }
 
     @PutMapping("/{id}")
@@ -95,5 +99,11 @@ public class CategoryController {
                 .build();
 
         return category;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class Id {
+        private String id;
     }
 }

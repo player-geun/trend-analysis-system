@@ -17,7 +17,7 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
     private final CategoryRepository categoryRepository;
 
-    public void save(Keyword keyword, List<String> categoryNames) {
+    public Keyword save(Keyword keyword, List<String> categoryNames) {
         if (keywordRepository.findByName(keyword.getName()) != null) {
             throw new IllegalStateException("이미 존재하는 키워드입니다.");
         }
@@ -30,7 +30,7 @@ public class KeywordService {
 
         Keyword newKeyword = Keyword.builder().name(keyword.getName()).categories(list).build();
 
-        keywordRepository.save(newKeyword);
+        Keyword save = keywordRepository.save(newKeyword);
 
         for (String name : categoryNames) {
             Category category = categoryRepository.findByName(name);
@@ -43,5 +43,7 @@ public class KeywordService {
             category.getKeywords().add(updatedKey);
             categoryRepository.save(category);
         }
+
+        return save;
     }
 }

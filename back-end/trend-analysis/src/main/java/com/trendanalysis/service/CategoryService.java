@@ -3,6 +3,7 @@ package com.trendanalysis.service;
 import com.trendanalysis.domain.Category;
 import com.trendanalysis.domain.Keyword;
 import com.trendanalysis.repository.CategoryRepository;
+import com.trendanalysis.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,10 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final KeywordRepository keywordRepository;
 
-    public void save(Category category) {
-        categoryRepository.save(category);
+    public Category save(Category category) {
+        return categoryRepository.save(category);
     }
 
     public Category findOne(ObjectId categoryId) {
@@ -32,6 +34,8 @@ public class CategoryService {
     }
 
     public void delete(ObjectId id) {
+
+
         categoryRepository.deleteById(id);
     }
 
