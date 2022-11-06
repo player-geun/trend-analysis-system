@@ -1,6 +1,5 @@
 package com.trendanalysis.dto;
 
-import com.trendanalysis.entity.Keyword;
 import lombok.Data;
 
 import java.util.List;
