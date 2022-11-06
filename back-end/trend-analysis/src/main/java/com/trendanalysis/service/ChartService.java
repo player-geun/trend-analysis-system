@@ -13,7 +13,7 @@ import java.util.Map;
 public class ChartService {
 
     public ChartResponseDto listSearchAmount(ChartRequestDto chartRequestDTO) {
-        String keyword = chartRequestDTO.getKeyword();
+        String keyword = chartRequestDTO.getKeywordName();
 
         return new ChartResponseDto(keyword, findSearchAmount(keyword));
     }

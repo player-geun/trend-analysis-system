@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class ChartRequestDto {
 
-    private String keyword;
+    private String keywordName;
 
     private LocalDateTime startedAt;
 
