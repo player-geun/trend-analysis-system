@@ -1,7 +1,6 @@
 package com.trendanalysis.service;
 
-import com.trendanalysis.entity.Category;
-import org.junit.jupiter.api.BeforeEach;
+import com.trendanalysis.domain.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +21,7 @@ class CategoryServiceTest {
     @Test
     public void 카테고리_저장() throws Exception {
         //given
-        Category category = Category.builder().name("커피").keywords("아메리카노").build();
+        Category category = Category.builder().name("커피").build();
 
         //when
         categoryService.save(category);
@@ -50,10 +49,10 @@ class CategoryServiceTest {
     public void 카테고리_수정() throws Exception {
         //given
         Category category = categoryService.findOne("커피");
-        Category updatedCategory = Category.builder().name("스타벅스").keywords("아메리카노").build();
+        Category updatedCategory = Category.builder().name("스타벅스").build();
 
         //when
-        Category newCategory = categoryService.update(updatedCategory, "커피");
+        Category newCategory = categoryService.update(updatedCategory, null, category.getId());
 
         //then
         assertThat(updatedCategory.getName()).isEqualTo(newCategory.getName());
@@ -62,10 +61,10 @@ class CategoryServiceTest {
     @Test
     public void 카테고리_삭제() throws Exception {
         //given
-        String categoryName = "스타벅스";
+        Category category = categoryService.findOne("스타벅스");
 
         //when
-        categoryService.delete(categoryName);
+        categoryService.delete(category.getId());
 
         //then
         assertThat(categoryService.findOne("스타벅스")).isNull();

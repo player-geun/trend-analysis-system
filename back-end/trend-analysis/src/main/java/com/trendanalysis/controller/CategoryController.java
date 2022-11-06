@@ -1,11 +1,18 @@
 package com.trendanalysis.controller;
 
-import com.trendanalysis.entity.Category;
+import com.trendanalysis.dto.CategoryRequestDto;
+import com.trendanalysis.dto.CategoryResponseDto;
+import com.trendanalysis.dto.ChildResponseDto;
+import com.trendanalysis.domain.Category;
+import com.trendanalysis.domain.Keyword;
 import com.trendanalysis.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/category")
@@ -14,43 +21,79 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    //카테고리 이름으로 검색
-    @GetMapping("/")
-    public Category list(@RequestParam String categoryName) {
-        Category category = categoryService.findOne(categoryName);
+    @GetMapping("/{id}")
+    public CategoryResponseDto list(@PathVariable ObjectId id) {
+        Category category = categoryService.findOne(id);
 
-        return category;
+        List<String> names = category.getKeywords().stream()
+                .map(k -> k.getName()).collect(Collectors.toList());
+
+        return new CategoryResponseDto(
+                category.getId().toString(),
+                category.getName(),
+                names,
+                category.getParentId(),
+                category.getCreatedAt());
     }
 
-//    //카테고리 아이디로 검색
-//    @GetMapping("/")
-//    public Category list(@RequestParam ObjectId categoryId) {
-//        Category category = categoryService.findOne(categoryId);
-//        System.out.println(category.getId());
-//        return category;
-//    }
+    @GetMapping("/child/{id}")
+    public ChildResponseDto listChild(@PathVariable String id) {
+        List<Category> child = categoryService.findChild(id);
 
-    @GetMapping("/all")
-    public List<Category> listAll() {
-        List<Category> categoryList = categoryService.findAll();
+        List<CategoryResponseDto> newChild = child.stream().map(category -> new CategoryResponseDto(
+                category.getId().toString(),
+                category.getName(),
+                null,
+                category.getParentId(),
+                category.getCreatedAt()
+                )).collect(Collectors.toList());
 
-        return categoryList;
+        return new ChildResponseDto(newChild);
     }
 
     @PostMapping("/")
-    public void create(@RequestBody Category category) {
+    public void create(@RequestBody CategoryRequestDto categoryRequestDto) {
+        List<Keyword> list = new ArrayList<>();
+
+        Category category = Category.builder()
+                .name(categoryRequestDto.getName())
+                .parentId(categoryRequestDto.getParentId())
+                .keywords(list)
+                .build();
+
         categoryService.save(category);
     }
 
-    @PutMapping("/{name}")
-    public Category updateCategory(@RequestBody Category category, @PathVariable String name) {
-        Category updatedCategory = categoryService.update(category, name);
+    @PutMapping("/{id}")
+    public CategoryResponseDto updateCategory(@RequestBody CategoryRequestDto categoryRequestDto, @PathVariable ObjectId id) {
+        Category category = toCategory(categoryRequestDto);
 
-        return updatedCategory;
+        Category updatedCategory = categoryService.update(category, categoryRequestDto.getKeywordNames(), id);
+
+        List<String> names = updatedCategory.getKeywords().stream()
+                .map(k -> k.getName()).collect(Collectors.toList());
+
+        return new CategoryResponseDto(
+                updatedCategory.getId().toString(),
+                updatedCategory.getName(),
+                names,
+                updatedCategory.getParentId(),
+                updatedCategory.getCreatedAt());
     }
 
-    @DeleteMapping("/{name}")
-    public void deleteCategory(@PathVariable String name) {
-        categoryService.delete(name);
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable ObjectId id) {
+        categoryService.delete(id);
+    }
+
+    private Category toCategory(CategoryRequestDto categoryRequestDto) {
+        List<Keyword> list = new ArrayList<>();
+
+        Category category = Category.builder()
+                .name(categoryRequestDto.getName())
+                .parentId(categoryRequestDto.getParentId())
+                .build();
+
+        return category;
     }
 }

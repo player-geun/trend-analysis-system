@@ -1,7 +1,7 @@
 package com.trendanalysis.controller;
 
-import com.trendanalysis.dto.ChartRequestDTO;
-import com.trendanalysis.dto.ChartResponseDTO;
+import com.trendanalysis.dto.ChartRequestDto;
+import com.trendanalysis.dto.ChartResponseDto;
 import com.trendanalysis.service.ChartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +17,8 @@ public class ChartController {
     private final ChartService chartService;
 
     @GetMapping("/keyword")
-    public ChartResponseDTO ListDataAmount(@RequestBody ChartRequestDTO chartRequestDTO) {
-        ChartResponseDTO chartResponseDTO = chartService.listSearchAmount(chartRequestDTO);
+    public ChartResponseDto ListDataAmount(@RequestBody ChartRequestDto chartRequestDTO) {
+        ChartResponseDto chartResponseDTO = chartService.listSearchAmount(chartRequestDTO);
 
         return chartResponseDTO;
     }

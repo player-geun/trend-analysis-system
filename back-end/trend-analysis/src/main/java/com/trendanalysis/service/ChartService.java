@@ -1,7 +1,7 @@
 package com.trendanalysis.service;
 
-import com.trendanalysis.dto.ChartRequestDTO;
-import com.trendanalysis.dto.ChartResponseDTO;
+import com.trendanalysis.dto.ChartRequestDto;
+import com.trendanalysis.dto.ChartResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,15 +12,10 @@ import java.util.Map;
 @Service
 public class ChartService {
 
-    public ChartResponseDTO listSearchAmount(ChartRequestDTO chartRequestDTO) {
-        ChartResponseDTO chartResponseDTO = new ChartResponseDTO();
-        Map<String, List<Integer>> map = new LinkedHashMap<>();
+    public ChartResponseDto listSearchAmount(ChartRequestDto chartRequestDTO) {
         String keyword = chartRequestDTO.getKeyword();
 
-        map.put(keyword, findSearchAmount(keyword));
-        chartResponseDTO.setSearchAmount(map);
-
-        return chartResponseDTO;
+        return new ChartResponseDto(keyword, findSearchAmount(keyword));
     }
 
     private List<Integer> findSearchAmount(String keyword) {

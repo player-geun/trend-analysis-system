@@ -1,11 +1,12 @@
 package com.trendanalysis.dto;
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-public class ChartRequestDTO {
+@Data
+public class ChartRequestDto {
 
     private String keyword;
 
