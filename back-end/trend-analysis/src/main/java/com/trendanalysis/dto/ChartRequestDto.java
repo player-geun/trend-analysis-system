@@ -1,16 +1,21 @@
 package com.trendanalysis.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ChartRequestDto {
 
-    private String keywordName;
+    private List<String> keywordNames;
 
-    private LocalDateTime startedAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
 
-    private LocalDateTime endedAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
 }
