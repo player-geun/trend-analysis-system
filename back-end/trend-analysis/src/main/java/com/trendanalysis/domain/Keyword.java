@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,13 @@ public class Keyword {
 
     private String name;
 
-    private List<Category> categories;
+    private List<ObjectId> categories;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public Keyword(String name, List<Category> categories) {
+    public Keyword(String name, List<ObjectId> categories) {
         this.name = name;
         this.categories = categories;
     }
