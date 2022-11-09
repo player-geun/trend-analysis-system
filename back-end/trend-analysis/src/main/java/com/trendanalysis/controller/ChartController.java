@@ -2,12 +2,15 @@ package com.trendanalysis.controller;
 
 import com.trendanalysis.dto.ChartRequestDto;
 import com.trendanalysis.dto.ChartResponseDto;
+
 import com.trendanalysis.service.ChartService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chart")
@@ -16,10 +19,23 @@ public class ChartController {
 
     private final ChartService chartService;
 
-    @GetMapping("/keyword")
-    public ChartResponseDto ListDataAmount(@RequestBody ChartRequestDto chartRequestDTO) {
-        ChartResponseDto chartResponseDTO = chartService.listSearchAmount(chartRequestDTO);
+    @PostMapping("/keyword")
+    public Response<ChartResponseDto> ListDataAmount(@RequestBody ChartRequestDto chartRequestDto) {
 
-        return chartResponseDTO;
+        return new Response<>(true, 1000,
+                chartService.listSearchAmount(
+                        chartRequestDto.getKeywordNames(),
+                        chartRequestDto.getStartDate().toString(),
+                        chartRequestDto.getEndDate().toString()));
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class Response <T> {
+        private Boolean isSuccess;
+
+        private Integer code;
+
+        private T result;
     }
 }

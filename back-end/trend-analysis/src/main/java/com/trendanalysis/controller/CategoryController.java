@@ -1,10 +1,7 @@
 package com.trendanalysis.controller;
 
-import com.trendanalysis.dto.CategoryRequestDto;
-import com.trendanalysis.dto.CategoryResponseDto;
-import com.trendanalysis.dto.ChildResponseDto;
+import com.trendanalysis.dto.*;
 import com.trendanalysis.domain.Category;
-import com.trendanalysis.domain.Keyword;
 import com.trendanalysis.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,24 +20,14 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
-    public CategoryResponseDto list(@PathVariable ObjectId id) {
-        Category category = categoryService.findOne(id);
-
-        List<String> names = category.getKeywords().stream()
-                .map(k -> k.getName()).collect(Collectors.toList());
-
-        return new CategoryResponseDto(
-                category.getId().toString(),
-                category.getName(),
-                names,
-                category.getParentId(),
-                category.getCreatedAt());
+    @GetMapping("/{categoryId}")
+    public Response<CategoryResponseDto> list(@PathVariable ObjectId categoryId) {
+        return new Response<CategoryResponseDto>(true, 1000, categoryService.findOne(categoryId));
     }
 
-    @GetMapping("/child/{id}")
-    public ChildResponseDto listChild(@PathVariable String id) {
-        List<Category> child = categoryService.findChild(id);
+    @GetMapping("/child/{categoryId}")
+    public Response<ChildResponseDto> listChild(@PathVariable String categoryId) {
+        List<Category> child = categoryService.findChild(categoryId);
 
         List<CategoryResponseDto> newChild = child.stream().map(category -> new CategoryResponseDto(
                 category.getId().toString(),
@@ -50,12 +37,12 @@ public class CategoryController {
                 category.getCreatedAt()
                 )).collect(Collectors.toList());
 
-        return new ChildResponseDto(newChild);
+        return new Response<ChildResponseDto>(true, 1000, new ChildResponseDto(newChild));
     }
 
     @PostMapping("/")
-    public Id create(@RequestBody CategoryRequestDto categoryRequestDto) {
-        List<Keyword> list = new ArrayList<>();
+    public Response<Id> create(@RequestBody CategoryRequestDto categoryRequestDto) {
+        List<ObjectId> list = new ArrayList<>();
 
         Category category = Category.builder()
                 .name(categoryRequestDto.getName())
@@ -65,45 +52,45 @@ public class CategoryController {
 
         Category save = categoryService.save(category);
 
-        return new Id(save.getId().toString());
+        return new Response<Id>(true, 1000, new Id(save.getId().toString()));
     }
 
-    @PutMapping("/{id}")
-    public CategoryResponseDto updateCategory(@RequestBody CategoryRequestDto categoryRequestDto, @PathVariable ObjectId id) {
-        Category category = toCategory(categoryRequestDto);
+    @PutMapping("/{categoryId}")
+    public Response<CategoryResponseDto> updateKeyword(
+            @RequestBody CategoryRequestDto categoryRequestDto, @PathVariable ObjectId categoryId) {
 
-        Category updatedCategory = categoryService.update(category, categoryRequestDto.getKeywordNames(), id);
+        Category updatedCategory = categoryService
+                .update(categoryRequestDto, categoryId);
 
-        List<String> names = updatedCategory.getKeywords().stream()
-                .map(k -> k.getName()).collect(Collectors.toList());
-
-        return new CategoryResponseDto(
+        return new Response<CategoryResponseDto>(true, 1000, new CategoryResponseDto(
                 updatedCategory.getId().toString(),
                 updatedCategory.getName(),
-                names,
+                updatedCategory.getKeywords().stream().map(ObjectId::toString).collect(Collectors.toList()),
                 updatedCategory.getParentId(),
-                updatedCategory.getCreatedAt());
+                updatedCategory.getCreatedAt()
+        ));
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable ObjectId id) {
-        categoryService.delete(id);
-    }
+    @DeleteMapping("/{categoryId}")
+    public Response deleteCategory(@PathVariable ObjectId categoryId) {
+        categoryService.deleteCategoryAndKeywords(categoryId);
 
-    private Category toCategory(CategoryRequestDto categoryRequestDto) {
-        List<Keyword> list = new ArrayList<>();
-
-        Category category = Category.builder()
-                .name(categoryRequestDto.getName())
-                .parentId(categoryRequestDto.getParentId())
-                .build();
-
-        return category;
+        return new Response(true, 1000, null);
     }
 
     @Data
     @AllArgsConstructor
     private class Id {
         private String id;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class Response <T> {
+        private Boolean isSuccess;
+
+        private Integer code;
+
+        private T result;
     }
 }
