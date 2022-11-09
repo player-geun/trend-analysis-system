@@ -22,13 +22,13 @@ public class Keyword {
 
     private String name;
 
-    private List<Category> categories;
+    private List<ObjectId> categories;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public Keyword(String name, List<Category> categories) {
+    public Keyword(String name, List<ObjectId> categories) {
         this.name = name;
         this.categories = categories;
     }

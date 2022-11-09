@@ -2,17 +2,20 @@ package com.trendanalysis.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
 public class ChartResponseDto {
 
-    private String keywordName;
+    List<ChartKey> keywordList;
 
-    private List<Integer> searchAmount;
+    @Data
+    @AllArgsConstructor
+    public static class ChartKey {
+        private String keywordName;
+
+        private List<Integer> searchAmount;
+    }
 }
