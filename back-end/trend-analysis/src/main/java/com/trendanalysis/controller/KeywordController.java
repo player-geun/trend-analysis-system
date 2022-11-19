@@ -7,6 +7,7 @@ import com.trendanalysis.service.KeywordService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/keyword")
+@Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class KeywordController {
 
@@ -23,7 +26,11 @@ public class KeywordController {
 
     @GetMapping("/{keywordId}")
     public Response<KeywordResponseDto> list(@PathVariable ObjectId keywordId) {
-        return new Response<KeywordResponseDto>(true, 1000, keywordService.findOne(keywordId));
+        try {
+            return new Response<KeywordResponseDto>(true, 1000, keywordService.findOne(keywordId));
+        } catch (IllegalStateException e) {
+            return new Response<KeywordResponseDto>(false, 2000, null);
+        }
     }
 
     @PostMapping("/")
@@ -35,9 +42,14 @@ public class KeywordController {
                 .categories(list)
                 .build();
 
-        Keyword save = keywordService.save(keyword, keywordRequestDto.getCategoryNames());
+        try {
+            Keyword save = keywordService.save(keyword, keywordRequestDto.getCategoryNames());
 
-        return new Response<Id>(true, 1000, new Id(save.getId().toString()));
+            return new Response<Id>(true, 1000, new Id(save.getId().toString()));
+        } catch (IllegalStateException e) {
+            log.info("키워드 중복", e);
+            return new Response<Id>(false, 2001, new Id(null));
+        }
     }
 
     @PutMapping("/{keywordId}")

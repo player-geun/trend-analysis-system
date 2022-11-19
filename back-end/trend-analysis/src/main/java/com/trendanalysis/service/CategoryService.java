@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +24,21 @@ public class CategoryService {
     private final KeywordRepository keywordRepository;
     private final KeywordService keywordService;
 
-    public Category save(Category category) {
-        return categoryRepository.save(category);
+    public Category save(Category category) throws IllegalStateException{
+       if(categoryRepository.findByName(category.getName()) != null){
+           throw new IllegalStateException("이미 존재하는 카테고리입니다.");
+       }
+           return categoryRepository.save(category);
     }
 
-    public CategoryResponseDto findOne(ObjectId categoryId) {
-        Category category = categoryRepository.findById(categoryId).get();
+    public CategoryResponseDto findOne(ObjectId categoryId) throws IllegalStateException {
+        Optional<Category> tempCategory = categoryRepository.findById(categoryId);
+        if (!tempCategory.isPresent()) {
+            throw new IllegalStateException("존재 하지 않는 카테고리 입니다.");
+        }
+
+        Category category = tempCategory.get();
+
         List<ObjectId> keywords = category.getKeywords();
 
         List<String> keywordNames = keywords.stream().map(id ->

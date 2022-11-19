@@ -6,6 +6,7 @@ import com.trendanalysis.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/category")
+@Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -22,7 +25,12 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     public Response<CategoryResponseDto> list(@PathVariable ObjectId categoryId) {
-        return new Response<CategoryResponseDto>(true, 1000, categoryService.findOne(categoryId));
+        try {
+            return new Response<CategoryResponseDto>(true, 1000, categoryService.findOne(categoryId));
+        } catch (IllegalStateException e) {
+            log.info("존재하지 않는 카테고리", e);
+            return new Response<CategoryResponseDto>(false, 3000, null);
+        }
     }
 
     @GetMapping("/child/{categoryId}")
@@ -50,9 +58,14 @@ public class CategoryController {
                 .keywords(list)
                 .build();
 
-        Category save = categoryService.save(category);
+        try {
+            Category save = categoryService.save(category);
 
-        return new Response<Id>(true, 1000, new Id(save.getId().toString()));
+            return new Response<Id>(true, 1000, new Id(save.getId().toString()));
+        } catch (IllegalStateException e) {
+            log.info("카테고리 중복", e);
+            return new Response<Id>(false, 3001, new Id(null));
+        }
     }
 
     @PutMapping("/{categoryId}")
