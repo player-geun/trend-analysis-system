@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +21,15 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
     private final CategoryRepository categoryRepository;
 
-    public KeywordResponseDto findOne(ObjectId keywordId) {
-        Keyword keyword = keywordRepository.findById(keywordId).get();
+    public KeywordResponseDto findOne(ObjectId keywordId) throws IllegalStateException {
+        Optional<Keyword> tempKeyword = keywordRepository.findById(keywordId);
+
+        if (!tempKeyword.isPresent()) {
+            throw new IllegalStateException("존재하지 않는 키워드입니다.");
+        }
+
+        Keyword keyword = tempKeyword.get();
+
         List<ObjectId> categoryIds = keyword.getCategories();
 
         List<String> categoryNames = categoryIds.stream().map(id ->
@@ -36,7 +44,7 @@ public class KeywordService {
         );
     }
 
-    public Keyword save(Keyword keyword, List<String> categoryNames) {
+    public Keyword save(Keyword keyword, List<String> categoryNames) throws IllegalStateException{
         if (keywordRepository.findByName(keyword.getName()) != null) {
             throw new IllegalStateException("이미 존재하는 키워드입니다.");
         }
