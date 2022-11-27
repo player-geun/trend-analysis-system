@@ -78,7 +78,7 @@ public class ChartService {
                                              String startedAt,
                                              String endedAt) {
 
-        List<ChartResponseDto> list = new ArrayList<>();
+        List<ChartResponseDto> list = null;
         Category category = categoryRepository.findByName(categoryName);
 
         ChartResponseDto result = null;
@@ -104,6 +104,7 @@ public class ChartService {
         List<Category> child = categoryRepository.findAllByParentId(category.getId().toString());
 
         if (child.size() != 0) {
+            list = new ArrayList<>();
             for (Category childCategory : child) {
                 if (childCategory.getKeywords().size() != 0) {
                     list.add(listDataByCategory(childCategory, startedAt, endedAt));
@@ -138,15 +139,5 @@ public class ChartService {
 
         NaverSearchRequestDto request = new NaverSearchRequestDto(startedAt, endedAt, "date", keywordGroups);
         return naverSearchService.naverShopSearchAPI(request);
-    }
-
-    private List<Integer> findSearchAmount(String keyword) {
-        List<Integer> list = new ArrayList<>();
-
-        for (int i = 0; i < 20; i++) {
-            list.add(i);
-        }
-
-        return list;
     }
 }

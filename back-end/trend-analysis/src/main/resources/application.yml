@@ -1,6 +1,10 @@
 spring:
   data:
     mongodb:
-      host: localhost
+      host: 3.39.227.41
       port: 27017
       database: trend_analysis
+
+  redis:
+    host: 52.79.171.168
+    port: 6379
