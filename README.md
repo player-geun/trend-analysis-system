@@ -26,7 +26,8 @@
 | 4 | 200 OK | 389 | 7 | 737B |
 | 5 | 200 OK | 401 | 8 | 737B |
 
-![image](https://github.com/player-geun/trend-analysis-system/assets/87115015/2e238c04-1a33-4eba-9f8a-2c919ef661c5)
+![image](https://github.com/player-geun/trend-analysis-system/assets/87115015/e61dbbf9-28da-4fa7-957d-c03db93d8792)
+
 
 ### 카테고리별 검색량 API
 약 443 ms -> 약 11 ms
@@ -38,6 +39,8 @@
 | 3 | 200 OK | 478 | 9 | 1.04KB |
 | 4 | 200 OK | 464 | 8 | 1.04KB |
 | 5 | 200 OK | 435 | 11 | 1.04KB |
+
+![image](https://github.com/player-geun/trend-analysis-system/assets/87115015/cc8c1cdc-a925-45f5-b211-6e34b7c9b3b8)
 
 
 ## 📄 최종 정리
