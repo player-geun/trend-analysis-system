@@ -39,9 +39,7 @@
 | 4 | 200 OK | 464 | 8 | 1.04KB |
 | 5 | 200 OK | 435 | 11 | 1.04KB |
 
-![image](https://github.com/player-geun/trend-analysis-system/assets/87115015/508a2484-398e-436f-8cf3-bc267988da1a)
-
 
 ## 📄 최종 정리
-![image](https://github.com/player-geun/trend-analysis-system/assets/87115015/1cb592a4-71fc-49ba-8648-401fd1893e83)
+<img src="https://github.com/player-geun/trend-analysis-system/assets/87115015/1cb592a4-71fc-49ba-8648-401fd1893e83" style="width: 25vw;" />
 
